@@ -1,0 +1,5 @@
+**/node_modules/*.js
+**/*.scss
+package*.json
+tsconfig.json
+public
