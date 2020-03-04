@@ -1,0 +1,13 @@
+@import './functions';
+
+$available-breakpoints: (
+  xs: 320px,
+  sm: 590px,
+  md: 960px,
+);
+
+$base-font: 'Fira Sans', sans-serif;
+$base-font-size: #{$rem-size}px;
+
+$black: #333;
+$white: #fff;
