@@ -1,15 +1,17 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { Users } from 'modules';
-
-import { ROUTE_BASE } from './routes';
+import { Users, Main } from 'modules';
+import { routes } from 'modules/routes';
 
 export const App = () => (
   <BrowserRouter>
-    <Switch>
-      <Route key={ROUTE_BASE} path={ROUTE_BASE} component={Users} />
-      <Redirect to={ROUTE_BASE} />
-    </Switch>
+    <Route path="/">
+      <Switch>
+        <Route exact key={routes.userRoutes.USERS} path={routes.userRoutes.USERS} component={Users} />
+        <Route key={routes.mainRoutes.MAIN} path={routes.mainRoutes.MAIN} component={Main} />
+        <Redirect to={routes.mainRoutes.MAIN} />
+      </Switch>
+    </Route>
   </BrowserRouter>
 );

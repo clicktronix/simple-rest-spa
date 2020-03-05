@@ -1,5 +1,5 @@
 import React from 'react';
 
-import { Layout } from 'modules/shared/Layout/Layout';
+import { Layout } from '../shared/Layout/Layout';
 
-export const Users = () => <Layout withFooter>Users page</Layout>;
+export const Users = () => <Layout withFooter><h1>Users page</h1></Layout>;
