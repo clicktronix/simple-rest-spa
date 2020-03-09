@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
 import { Link, useLocation } from 'react-router-dom';
+
+import { Button } from 'shared/view/components';
 
 import { routes } from '../../../routes';
 import styles from './Header.module.scss';
