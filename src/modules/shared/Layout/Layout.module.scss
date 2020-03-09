@@ -1,0 +1,29 @@
+@import '~shared/styles/variables';
+@import '~shared/styles/functions';
+
+.Wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  color: $white;
+}
+
+.Content {
+  display: flex;
+  flex: 1;
+  background-color: $red;
+  justify-content: center;
+}
+
+.Header {
+  background-color: $brown;
+}
+
+.Footer {
+  font-size: rem(12);
+  display: flex;
+  height: 2rem;
+  background-color: $brown;
+  justify-content: center;
+  align-items: center;
+}

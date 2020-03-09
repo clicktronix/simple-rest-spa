@@ -58,6 +58,7 @@ module.exports = {
         ObjectExpression: { minProperties: 2 },
       },
     ],
+    'arrow-parens': 'off',
   },
   env: {
     jest: true,

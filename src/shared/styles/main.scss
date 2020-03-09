@@ -1,0 +1,39 @@
+@import './variables';
+@import './mixins';
+@import './mui';
+
+html {
+  font-size: $base-font-size;
+}
+
+* {
+  outline: none;
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: none;
+}
+
+* a {
+  text-decoration: none;
+}
+
+* ul {
+  list-style: none;
+}
+
+body {
+  margin: 0;
+  font-family: $base-font;
+  background: $white;
+  color: $black;
+  font-size: 1rem;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+}
