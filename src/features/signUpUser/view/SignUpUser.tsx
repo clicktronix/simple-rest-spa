@@ -5,17 +5,17 @@ import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
 
-type RegisterForm = {
+type SignUpForm = {
   name: string;
   surname: string;
   email: string;
   password: string;
 };
 
-export const RegisterUser = () => {
-  const handleFormSubmit = (values: RegisterForm) => console.info(values);
+export const SignUp = () => {
+  const handleFormSubmit = (values: SignUpForm) => console.info(values);
 
-  const renderForm = ({ handleSubmit }: FormRenderProps<RegisterForm>) => (
+  const renderForm = ({ handleSubmit }: FormRenderProps<SignUpForm>) => (
     <form onSubmit={handleSubmit}>
       <TextInputField
         name="name"
@@ -41,12 +41,12 @@ export const RegisterUser = () => {
           makeRequired('Field required'),
         )}
       />
-      <Button type="submit">Register</Button>
+      <Button type="submit">Sign Up</Button>
     </form>
   );
 
   return (
-    <Form<RegisterForm>
+    <Form<SignUpForm>
       onSubmit={handleFormSubmit}
       render={renderForm}
       subscription={{}}

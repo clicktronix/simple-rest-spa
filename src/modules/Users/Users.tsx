@@ -1,9 +1,15 @@
-import React from 'react';
+import * as React from 'react';
+import { Route } from 'react-router-dom';
 
-import { Layout } from '../shared/Layout/Layout';
+import { Module } from 'shared/types/app';
 
-export const Users = () => (
-  <Layout withFooter>
-    <h1>Users page</h1>
-  </Layout>
-);
+import * as routes from './routes';
+import { UsersLayout } from './view/UsersLayout';
+
+export class UsersModule extends Module {
+  public static getRoutes() {
+    return [(
+      <Route exact key={routes.USERS} path={routes.USERS} component={UsersLayout} />
+    )];
+  }
+}

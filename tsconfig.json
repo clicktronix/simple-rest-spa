@@ -21,7 +21,8 @@
     "strictBindCallApply": true,
     "sourceMap": true,
     "downlevelIteration": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "isolatedModules": true
   },
   "include": [
     "src"

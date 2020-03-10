@@ -1,3 +1,3 @@
-export { Users } from './Users/Users';
-export { Main } from './Main/Main';
-export { App } from './App/App';
+export { UsersModule } from './Users/Users';
+export { MainModule } from './Main/Main';
+export { AuthModule } from './Auth/Auth';

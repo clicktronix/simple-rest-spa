@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { App, Users, Main } from 'modules';
+import * as modules from 'modules';
 import { routes } from 'modules/routes';
+import { App } from 'core/App';
 
 export const Core = () => (
   <BrowserRouter>
     <Route path="/">
       <App>
         <Switch>
-          <Route exact key={routes.userRoutes.USERS} path={routes.userRoutes.USERS} component={Users} />
-          <Route key={routes.mainRoutes.MAIN} path={routes.mainRoutes.MAIN} component={Main} />
+          {Object.values(modules).map(x => x.getRoutes())}
           <Redirect to={routes.mainRoutes.MAIN} />
         </Switch>
       </App>

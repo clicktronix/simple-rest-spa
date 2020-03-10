@@ -35,8 +35,12 @@ export const Header = () => {
         ))}
       </div>
       <div className={styles.RightSide}>
-        <Button>Login</Button>
-        <Button>Register</Button>
+        <Link to={routes.authRoutes.SIGN_IN}>
+          <Button>Sign In</Button>
+        </Link>
+        <Link to={routes.authRoutes.SIGN_UP}>
+          <Button>Sign Up</Button>
+        </Link>
       </div>
     </div>
   );
