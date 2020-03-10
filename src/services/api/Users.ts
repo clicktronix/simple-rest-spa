@@ -11,7 +11,7 @@ class Users extends BaseApi {
   }
 
   @autobind
-  public async signIn(params: User) {
+  public async signIn(params: { email: string; password: string }) {
     const response = await this.actions.post<UserResponse[]>('/authenticate', params);
     return response;
   }

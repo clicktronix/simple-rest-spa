@@ -53,7 +53,7 @@ export const SignUp = () => {
         )}
       />
       <div className={styles.SubmitButton}>
-        <Button type="submit">Sign Up</Button>
+        <Button type="primary" htmlType="submit">Sign Up</Button>
       </div>
     </form>
   );

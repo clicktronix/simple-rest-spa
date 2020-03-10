@@ -4,6 +4,7 @@ import { Form, FormRenderProps } from 'react-final-form';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
+import { api } from 'services/api/Api';
 
 import styles from './SignInUser.module.scss';
 
@@ -13,7 +14,15 @@ type SignInForm = {
 };
 
 export const SignIn = () => {
-  const handleFormSubmit = (values: SignInForm) => console.info(values);
+  const singIn = async (values: SignInForm) => {
+    try {
+      await api.users.signIn(values);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleFormSubmit = (values: SignInForm) => singIn(values);
 
   const renderForm = ({ handleSubmit }: FormRenderProps<SignInForm>) => (
     <form onSubmit={handleSubmit} className={styles.SignInForm}>
@@ -30,7 +39,7 @@ export const SignIn = () => {
         )}
       />
       <div className={styles.SubmitButton}>
-        <Button type="submit">Sign In</Button>
+        <Button type="primary" htmlType="submit">Sign In</Button>
       </div>
     </form>
   );
