@@ -5,8 +5,14 @@ import { UserResponse, User } from './types/models/user';
 
 class Users extends BaseApi {
   @autobind
-  public async registerUser(params: User) {
+  public async signUp(params: User) {
     const response = await this.actions.post<UserResponse[]>('/register', params);
+    return response;
+  }
+
+  @autobind
+  public async signIn(params: User) {
+    const response = await this.actions.post<UserResponse[]>('/authenticate', params);
     return response;
   }
 

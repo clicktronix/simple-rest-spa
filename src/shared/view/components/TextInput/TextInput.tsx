@@ -7,12 +7,12 @@ import Adjust from '@material-ui/icons/Adjust';
 
 export type Props = Omit<TextFieldProps, 'ref'>;
 
-interface IState {
+type State = {
   type?: string;
-}
+};
 
-export class TextInput extends React.PureComponent<Props, IState> {
-  public state: IState = { type: this.props.type };
+export class TextInput extends React.PureComponent<Props, State> {
+  public state: State = { type: this.props.type };
 
   public render() {
     const { InputProps } = this.props;

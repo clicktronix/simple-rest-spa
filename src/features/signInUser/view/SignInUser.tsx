@@ -5,6 +5,8 @@ import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
 
+import styles from './SignInUser.module.scss';
+
 type SignInForm = {
   email: string;
   password: string;
@@ -14,7 +16,7 @@ export const SignIn = () => {
   const handleFormSubmit = (values: SignInForm) => console.info(values);
 
   const renderForm = ({ handleSubmit }: FormRenderProps<SignInForm>) => (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles.SignInForm}>
       <TextInputField
         name="email"
         validate={composeValidators(
@@ -27,7 +29,9 @@ export const SignIn = () => {
           makeRequired('Field required'),
         )}
       />
-      <Button type="submit">Sign In</Button>
+      <div className={styles.SubmitButton}>
+        <Button type="submit">Sign In</Button>
+      </div>
     </form>
   );
 
