@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+import { Button } from 'shared/view/components';
 
 import { routes } from '../../../routes';
 import styles from './Header.module.scss';
@@ -11,32 +12,24 @@ const menuItems = [{
   route: routes.userRoutes.USERS, title: 'Users',
 }];
 
-export const Header = () => {
-  const location = useLocation();
-  const [activeTab, setActiveTab] = useState(location.pathname);
-
-  const handleTabChange = (newTabValue: string) => () => {
-    setActiveTab(newTabValue);
-  };
-
-  return (
-    <div className={styles.Header}>
-      <div className={styles.LeftSide}>
-        {menuItems.map(({ route, title }) => (
-          <Link to={route} key={route} className={styles.MenuItem}>
-            <Button
-              onClick={handleTabChange(route)}
-              color={activeTab === route ? 'primary' : 'default'}
-            >
-              {title}
-            </Button>
-          </Link>
-        ))}
-      </div>
-      <div className={styles.RightSide}>
-        <Button>Login</Button>
-        <Button>Register</Button>
-      </div>
+export const Header = () => (
+  <div className={styles.Header}>
+    <div className={styles.LeftSide}>
+      {menuItems.map(({ route, title }) => (
+        <Link to={route} key={route}>
+          <Button color="primary">
+            {title}
+          </Button>
+        </Link>
+      ))}
     </div>
-  );
-};
+    <div className={styles.RightSide}>
+      <Link to={routes.authRoutes.SIGN_IN}>
+        <Button color="primary">Sign In</Button>
+      </Link>
+      <Link to={routes.authRoutes.SIGN_UP}>
+        <Button color="primary">Sign Up</Button>
+      </Link>
+    </div>
+  </div>
+);

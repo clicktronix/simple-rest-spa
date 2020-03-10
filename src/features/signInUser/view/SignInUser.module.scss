@@ -1,0 +1,12 @@
+@import '~shared/styles/variables';
+@import '~shared/styles/functions';
+
+.SignInForm {
+  width: rem(350);
+  padding-top: rem(30);
+}
+
+.SubmitButton {
+  float: right;
+  margin-top: rem(20);
+}

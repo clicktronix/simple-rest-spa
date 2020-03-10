@@ -5,25 +5,27 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  color: $white;
+  color: $dark-grey;
 }
 
 .Content {
   display: flex;
   flex: 1;
-  background-color: $red;
+  background-color: $yellow;
   justify-content: center;
 }
 
 .Header {
-  background-color: $brown;
+  background-color: $dark-grey;
+  color: $yellow;
 }
 
 .Footer {
   font-size: rem(12);
+  color: $yellow;
   display: flex;
   height: 2rem;
-  background-color: $brown;
+  background-color: $dark-grey;
   justify-content: center;
   align-items: center;
 }

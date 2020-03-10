@@ -1,9 +1,15 @@
-import React from 'react';
+import * as React from 'react';
+import { Route } from 'react-router-dom';
 
-import { Layout } from '../shared/Layout/Layout';
+import { Module } from 'shared/types/app';
 
-export const Main = () => (
-  <Layout withFooter>
-    <h1>Main page</h1>
-  </Layout>
-);
+import * as routes from './routes';
+import { MainLayout } from './view/MainLayout';
+
+export class MainModule extends Module {
+  public static getRoutes() {
+    return [(
+      <Route exact key={routes.MAIN} path={routes.MAIN} component={MainLayout} />
+    )];
+  }
+}

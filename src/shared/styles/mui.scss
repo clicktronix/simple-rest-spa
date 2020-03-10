@@ -1,5 +1,14 @@
 @import './variables';
+@import './functions';
 
 .MuiButton-textPrimary {
-  color: $white !important;
+  color: $yellow !important;
+}
+
+.MuiButton-textSecondary {
+  color: $dark-grey !important;
+}
+
+.MuiInputBase-input {
+  margin: rem(7) !important;
 }
