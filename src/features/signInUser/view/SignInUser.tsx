@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
+import { Form as AntForm, Typography } from 'antd';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { api } from 'services/api/Api';
+import { useApi } from 'services/api';
 
 import styles from './SignInUser.module.scss';
+
+const { Text } = Typography;
 
 type SignInForm = {
   email: string;
@@ -14,34 +17,52 @@ type SignInForm = {
 };
 
 export const SignIn = () => {
-  const singIn = async (values: SignInForm) => {
+  const api = useApi();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const signIn = async (values: SignInForm) => {
     try {
+      setIsLoading(true);
       await api.users.signIn(values);
     } catch (e) {
-      console.error(e);
+      setError(e.response.data);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleFormSubmit = (values: SignInForm) => singIn(values);
+  const handleFormSubmit = (values: SignInForm) => signIn(values);
 
   const renderForm = ({ handleSubmit }: FormRenderProps<SignInForm>) => (
-    <form onSubmit={handleSubmit} className={styles.SignInForm}>
-      <TextInputField
-        name="email"
-        validate={composeValidators(
-          makeRequired('Field required'),
-        )}
-      />
-      <TextInputField
-        name="password"
-        validate={composeValidators(
-          makeRequired('Field required'),
-        )}
-      />
-      <div className={styles.SubmitButton}>
-        <Button type="primary" htmlType="submit">Sign In</Button>
-      </div>
-    </form>
+    <div className={styles.SignInForm}>
+      <AntForm onFinish={handleSubmit} className={styles.SignInForm}>
+        <AntForm.Item>
+          <TextInputField
+            name="email"
+            placeholder="Enter your email"
+            validate={composeValidators(
+              makeRequired('Field required'),
+            )}
+          />
+        </AntForm.Item>
+        <AntForm.Item>
+          <TextInputField
+            name="password"
+            placeholder="Enter your password"
+            validate={composeValidators(
+              makeRequired('Field required'),
+            )}
+          />
+        </AntForm.Item>
+        <AntForm.Item>
+          <Button type="primary" htmlType="submit" loading={isLoading}>
+            Sign In
+          </Button>
+        </AntForm.Item>
+        {error && <Text type="danger">{error}</Text>}
+      </AntForm>
+    </div>
   );
 
   return (

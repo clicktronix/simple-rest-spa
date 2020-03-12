@@ -1,7 +1,7 @@
 import { autobind } from 'core-decorators';
 
 import { BaseApi } from './BaseApi';
-import { UserResponse, User } from './types/models/user';
+import { UserResponse, User } from '../types/models/user';
 
 class Users extends BaseApi {
   @autobind

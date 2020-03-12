@@ -1,5 +1,5 @@
-import { HttpActions } from './HttpActions';
-import { Storage } from './storage';
+import { HttpActions } from '../HttpActions';
+import { Storage } from '../storage';
 
 class BaseApi {
   protected actions: HttpActions;

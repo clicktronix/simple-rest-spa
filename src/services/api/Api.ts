@@ -1,8 +1,8 @@
 import { CONFIG } from 'core/config';
 
 import { HttpActions } from './HttpActions';
-import { Users } from './Users';
-import { Storage, storage } from './storage';
+import { Users } from './entities/Users';
+import { Storage } from './storage';
 
 class Api {
   private actions: HttpActions;
@@ -17,5 +17,4 @@ class Api {
   }
 }
 
-const api = new Api(storage);
-export { api };
+export { Api };
