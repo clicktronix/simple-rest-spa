@@ -1,16 +1,17 @@
 import React from 'react';
 import { FieldRenderProps } from 'react-final-form';
 
-import { TextInput, Props as TextInputProps } from '../../components';
-import { getFieldWithComponent } from '../../../helpers/getFieldWithComponent';
+import { getFieldWithComponent } from 'shared/helpers/getFieldWithComponent';
 
-type TextInputFieldProps = TextInputProps & FieldRenderProps<string | number>;
+import { TextInput, Props } from '../../components';
+
+type TextInputFieldProps = Props & FieldRenderProps<string | number>;
 
 function TextInputFieldComponent(props: TextInputFieldProps) {
   const { input, meta, ...rest } = props;
   const error = (meta.touched && rest.error) || (meta.touched && meta.error) ? meta.error : undefined;
 
-  return <TextInput {...rest} error={Boolean(error)} {...input} />;
+  return <TextInput {...input} error={error} {...rest} />;
 }
 
 const TextInputField = getFieldWithComponent(TextInputFieldComponent);

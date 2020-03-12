@@ -1,1 +1,1 @@
-export { default as Button } from '@material-ui/core/Button';
+export { Button } from 'antd';

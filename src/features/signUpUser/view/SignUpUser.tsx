@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
+import { Form as AntForm, Typography } from 'antd';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { api } from 'services/api/Api';
+import { useApi } from 'services/api';
 
 import styles from './SignUpUser.module.scss';
+
+const { Text } = Typography;
 
 type SignUpForm = {
   name: string;
@@ -16,46 +19,70 @@ type SignUpForm = {
 };
 
 export const SignUp = () => {
-  const singUp = async (values: SignUpForm) => {
+  const api = useApi();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const signUp = async (values: SignUpForm) => {
     try {
+      setIsLoading(true);
       await api.users.signUp(values);
     } catch (e) {
-      console.error(e);
+      setError(e.response.data);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleFormSubmit = (values: SignUpForm) => singUp(values);
+  const handleFormSubmit = (values: SignUpForm) => signUp(values);
 
   const renderForm = ({ handleSubmit }: FormRenderProps<SignUpForm>) => (
-    <form onSubmit={handleSubmit} className={styles.SignUpForm}>
-      <TextInputField
-        name="name"
-        validate={composeValidators(
-          makeRequired('Field required'),
-        )}
-      />
-      <TextInputField
-        name="surname"
-        validate={composeValidators(
-          makeRequired('Field required'),
-        )}
-      />
-      <TextInputField
-        name="email"
-        validate={composeValidators(
-          makeRequired('Field required'),
-        )}
-      />
-      <TextInputField
-        name="password"
-        validate={composeValidators(
-          makeRequired('Field required'),
-        )}
-      />
-      <div className={styles.SubmitButton}>
-        <Button type="submit">Sign Up</Button>
-      </div>
-    </form>
+    <div className={styles.SignUpForm}>
+      <AntForm onFinish={handleSubmit} className={styles.SignInForm}>
+        <AntForm.Item>
+          <TextInputField
+            name="name"
+            placeholder="Enter your name"
+            validate={composeValidators(
+              makeRequired('Field required'),
+            )}
+          />
+        </AntForm.Item>
+        <AntForm.Item>
+          <TextInputField
+            name="surname"
+            placeholder="Enter your surname"
+            validate={composeValidators(
+              makeRequired('Field required'),
+            )}
+          />
+        </AntForm.Item>
+        <AntForm.Item>
+          <TextInputField
+            name="email"
+            placeholder="Enter your email"
+            validate={composeValidators(
+              makeRequired('Field required'),
+            )}
+          />
+        </AntForm.Item>
+        <AntForm.Item>
+          <TextInputField
+            name="password"
+            placeholder="Enter your password"
+            validate={composeValidators(
+              makeRequired('Field required'),
+            )}
+          />
+        </AntForm.Item>
+        <AntForm.Item>
+          <Button type="primary" htmlType="submit" loading={isLoading}>
+            Sign Up
+          </Button>
+        </AntForm.Item>
+        {error && <Text type="danger">{error}</Text>}
+      </AntForm>
+    </div>
   );
 
   return (

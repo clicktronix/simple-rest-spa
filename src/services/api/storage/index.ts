@@ -1,7 +1,3 @@
-import { LocalStorage } from './LocalStorage';
-import { Storage } from './types';
-
-const storage: Storage = new LocalStorage();
-
+export { LocalStorage } from './LocalStorage';
+export { MemoryStorage } from './MemoryStorage';
 export * from './types';
-export { storage };

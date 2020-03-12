@@ -11,18 +11,13 @@
 .Content {
   display: flex;
   flex: 1;
-  background-color: $yellow;
+  background-color: $white;
   justify-content: center;
-}
-
-.Header {
-  background-color: $dark-grey;
-  color: $yellow;
 }
 
 .Footer {
   font-size: rem(12);
-  color: $yellow;
+  color: $white;
   display: flex;
   height: 2rem;
   background-color: $dark-grey;

@@ -1,55 +1,15 @@
 import React from 'react';
-import { autobind } from 'core-decorators';
-import TextField, { TextFieldProps } from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Adjust from '@material-ui/icons/Adjust';
+import { Input, Typography } from 'antd';
 
-export type Props = Omit<TextFieldProps, 'ref'>;
+const { Text } = Typography;
 
-type State = {
-  type?: string;
+export type Props = Input['props'] & {
+  error?: string;
 };
 
-export class TextInput extends React.PureComponent<Props, State> {
-  public state: State = { type: this.props.type };
-
-  public render() {
-    const { InputProps } = this.props;
-    const { type } = this.state;
-
-    return (
-      <TextField
-        {...this.props as TextFieldProps}
-        type={type}
-        InputProps={{
-          ...InputProps,
-          endAdornment: this.renderEndAdornment(),
-        }}
-        fullWidth
-      />
-    );
-  }
-
-  private renderEndAdornment(): React.ReactNode {
-    const { type } = this.props;
-
-    return type === 'password'
-      ? (
-        <InputAdornment position="end">
-          <IconButton
-            aria-label="Toggle password visibility"
-            onClick={this.handleClickShowPassword}
-          >
-            <Adjust />
-          </IconButton>
-        </InputAdornment>
-      )
-      : null;
-  }
-
-  @autobind
-  private handleClickShowPassword() {
-    this.setState(state => ({ type: state.type === 'password' ? 'text' : 'password' }));
-  }
-}
+export const TextInput = ({ error, ...rest }: Props) => (
+  <>
+    <Input {...rest} />
+    {error && <Text type="danger">{error}</Text>}
+  </>
+);

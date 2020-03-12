@@ -1,28 +1,17 @@
 import React from 'react';
 import { Field, FieldRenderProps, FieldProps as RFFieldProps } from 'react-final-form';
 
-type MergeRight<L, R> = R & Pick<L, Exclude<keyof L, keyof R>>;
 type Value = string | number;
-type BaseWrappedFieldProps = FieldRenderProps<Value> & {
+type BaseWrappedFieldProps = FieldRenderProps<Value, any> & {
   value?: any;
 };
-type RFFieldPropKey =
-  | 'allowNull'
-  | 'format'
-  | 'formatOnBlur'
-  | 'parse'
-  | 'name'
-  | 'isEqual'
-  | 'subscription'
-  | 'validate'
-  | 'value';
 
 function getFieldWithComponent<P extends BaseWrappedFieldProps>(Component: React.ComponentType<P>, type?: string) {
   type OwnProps = Omit<P, keyof BaseWrappedFieldProps>;
-  type FieldProps = Pick<RFFieldProps<Value, BaseWrappedFieldProps>, RFFieldPropKey>;
-  type ResultProps = MergeRight<OwnProps, FieldProps>;
+  type FieldProps = RFFieldProps<Value, P>;
+  type ResultProps = OwnProps & FieldProps;
 
-  const result: React.StatelessComponent<ResultProps> = (props: ResultProps) => (
+  const result = (props: ResultProps) => (
     <Field type={type} {...props} component={Component} />
   );
 
