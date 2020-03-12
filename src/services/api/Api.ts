@@ -10,10 +10,10 @@ class Api {
 
   public users: Users;
 
-  constructor(localStorage: Storage) {
+  constructor(public storage: Storage) {
     this.actions = new HttpActions(CONFIG.baseUrl, this.headers);
 
-    this.users = new Users(this.actions, localStorage);
+    this.users = new Users(this.actions, storage);
   }
 }
 

@@ -5,7 +5,8 @@ import { Form as AntForm, Typography } from 'antd';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { useApi } from 'services/api';
+import { useToken } from 'utils/hooks/useToken';
+import { useApi } from 'utils/hooks/useApi';
 
 import styles from './SignInUser.module.scss';
 
@@ -18,13 +19,15 @@ type SignInForm = {
 
 export const SignIn = () => {
   const api = useApi();
+  const { setToken } = useToken(api.storage);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const signIn = async (values: SignInForm) => {
     try {
       setIsLoading(true);
-      await api.users.signIn(values);
+      const res = await api.users.signIn(values);
+      setToken(res.data.token.accessToken);
     } catch (e) {
       setError(e.response.data);
     } finally {
