@@ -1,3 +1,8 @@
+import { User } from 'shared/types/models';
+
 export type Auth = {
-  token: string,
+  user: User | null,
+  token: string | null;
+  setAuth: (user: User, token: string) => void,
+  resetAuth: () => void,
 };

@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useToken } from 'utils/hooks/useToken';
 import { useApi } from 'utils/hooks/useApi';
+import { User } from 'shared/types/models';
 
-export const AuthContext = React.createContext<string | null>(null);
+import { Auth } from './types';
+
+export const AuthContext = React.createContext<Auth | null>(null);
 
 export const AuthContextProvider: React.FC = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
   const api = useApi();
-  const { getToken } = useToken(api.storage);
+  const { getToken, setToken } = useToken(api.storage);
+  const setAuth = (u: User, token: string) => {
+    setUser(u);
+    setToken(token);
+  };
+  const resetAuth = () => { };
 
   return (
-    <AuthContext.Provider value={getToken()}>
+    <AuthContext.Provider
+      value={{
+        user, token: getToken(), setAuth, resetAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
