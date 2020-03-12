@@ -1,8 +1,9 @@
 import React from 'react';
 import { FieldRenderProps } from 'react-final-form';
 
+import { getFieldWithComponent } from 'shared/helpers/getFieldWithComponent';
+
 import { TextInput, Props } from '../../components';
-import { getFieldWithComponent } from '../../../helpers/getFieldWithComponent';
 
 type TextInputFieldProps = Props & FieldRenderProps<string | number>;
 
