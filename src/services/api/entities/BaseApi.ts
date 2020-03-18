@@ -5,13 +5,21 @@ class BaseApi {
   protected actions: HttpActions;
   protected storage: Storage;
 
-  set token(value: string | null) {
-    this.token = value;
+  get token() {
+    return this.storage.get<string, null>('token', null);
+  }
+
+  set token(t: string | null) {
+    this.storage.set('token', t);
   }
 
   constructor(actions: HttpActions, storage: Storage) {
     this.actions = actions;
     this.storage = storage;
+  }
+
+  protected setHeaders() {
+    return { headers: { Authorization: this.token } };
   }
 }
 

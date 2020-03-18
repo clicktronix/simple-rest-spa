@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { useToken } from 'utils/hooks/useToken';
 import { useApi } from 'utils/hooks/useApi';
+import { AuthContext } from 'services/auth';
 
 import styles from './SignInUser.module.scss';
 
@@ -19,15 +19,15 @@ type SignInForm = {
 
 export const SignIn = () => {
   const api = useApi();
-  const { setToken } = useToken(api.storage);
+  const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const signIn = async (values: SignInForm) => {
     try {
       setIsLoading(true);
-      const res = await api.users.signIn(values);
-      setToken(res.data.token.accessToken);
+      const { data } = await api.auth.signIn(values);
+      auth?.setAuth(data.data, data.token.accessToken);
     } catch (e) {
       setError(e.response.data);
     } finally {

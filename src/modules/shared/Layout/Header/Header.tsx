@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import { ClickParam } from 'antd/lib/menu';
+
+import { AuthContext } from 'services/auth';
 
 import { routes } from '../../../routes';
 import styles from './Header.module.scss';
@@ -13,6 +15,7 @@ const menuItems = [{
 }];
 
 export const Header = () => {
+  const auth = useContext(AuthContext);
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(location.pathname);
 
@@ -30,16 +33,28 @@ export const Header = () => {
             </Link>
           </Menu.Item>
         ))}
-        <Menu.Item key={routes.authRoutes.SIGN_IN} className={styles.Button}>
-          <Link to={routes.authRoutes.SIGN_IN}>
-            Sign In
-          </Link>
-        </Menu.Item>
-        <Menu.Item key={routes.authRoutes.SIGN_UP} className={styles.Button}>
-          <Link to={routes.authRoutes.SIGN_UP}>
-            Sign Up
-          </Link>
-        </Menu.Item>
+        {auth?.user
+          ? (
+            <Menu.Item key={routes.profileRoutes.PROFILE} className={styles.Button}>
+              <Link to={routes.profileRoutes.PROFILE}>
+                {auth.user.email}
+              </Link>
+            </Menu.Item>
+          )
+          : (
+            <Menu.Item key={routes.authRoutes.SIGN_IN} className={styles.Button}>
+              <Link to={routes.authRoutes.SIGN_IN}>
+                Sign In
+              </Link>
+            </Menu.Item>
+          )}
+        {!auth?.user && (
+          <Menu.Item key={routes.authRoutes.SIGN_UP} className={styles.Button}>
+            <Link to={routes.authRoutes.SIGN_UP}>
+              Sign Up
+            </Link>
+          </Menu.Item>
+        )}
       </Menu>
     </header>
   );
