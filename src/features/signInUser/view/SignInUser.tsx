@@ -26,10 +26,10 @@ export const SignIn = () => {
   const signIn = async (values: SignInForm) => {
     try {
       setIsLoading(true);
-      const { data } = await api.auth.signIn(values);
-      auth?.setAuth(data.data, data.token.accessToken);
+      const { data, tokens } = await api.auth.signIn(values);
+      auth?.setAuth(data, tokens.accessToken);
     } catch (e) {
-      setError(e.response.data);
+      setError(e.message);
     } finally {
       setIsLoading(false);
     }

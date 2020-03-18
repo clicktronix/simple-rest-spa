@@ -1,5 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosPromise } from 'axios';
 
+type HttpActionParams = {
+  url: string;
+  options?: AxiosRequestConfig;
+  data?: any;
+};
+
 class HttpActions {
   private request: AxiosInstance;
 
@@ -13,42 +19,30 @@ class HttpActions {
     this.request = axios.create(config);
   }
 
-  public get<T>(url: string, params?: object, options?: AxiosRequestConfig): AxiosPromise<T> {
+  public get<T>({ url, data, options }: HttpActionParams): AxiosPromise<T> {
     const config: AxiosRequestConfig = {
-      params, ...options,
+      data, ...options,
     };
     return this.request.get(url, config);
   }
 
-  public post<T>(url: string, data?: any, options?: AxiosRequestConfig): AxiosPromise<T> {
+  public post<T>({ url, data, options }: HttpActionParams): AxiosPromise<T> {
     return this.request.post(url, data, options);
   }
 
-  public patch<T>(url: string, data: any, options: AxiosRequestConfig): AxiosPromise<T> {
+  public patch<T>({ url, data, options }: HttpActionParams): AxiosPromise<T> {
     return this.request.patch(url, data, options);
   }
 
-  public del<T>(
-    url: string,
-    data: any,
-    params: object,
-    options: AxiosRequestConfig,
-  ): AxiosPromise<T> {
+  public del<T>({ url, data, options }: HttpActionParams): AxiosPromise<T> {
     const config: AxiosRequestConfig = {
-      url, data, params, ...options,
+      url, data, ...options,
     };
     return this.request.delete(url, config);
   }
 
-  public put<T>(
-    url: string,
-    data: any,
-    params: object,
-    options: AxiosRequestConfig,
-  ): AxiosPromise<T> {
-    return this.request.put(url, data, {
-      params, ...options,
-    });
+  public put<T>({ url, data, options }: HttpActionParams): AxiosPromise<T> {
+    return this.request.put(url, data, { ...options });
   }
 }
 

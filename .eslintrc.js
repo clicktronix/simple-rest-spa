@@ -59,6 +59,7 @@ module.exports = {
       },
     ],
     'arrow-parens': 'off',
+    'no-underscore-dangle': 'off',
   },
   env: {
     jest: true,

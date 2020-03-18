@@ -28,7 +28,7 @@ export const SignUp = () => {
       setIsLoading(true);
       await api.auth.signUp(values);
     } catch (e) {
-      setError(e.response.data);
+      setError(e.message);
     } finally {
       setIsLoading(false);
     }
