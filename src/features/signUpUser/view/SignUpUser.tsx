@@ -5,7 +5,7 @@ import { Form as AntForm, Typography } from 'antd';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { useApi } from 'services/api';
+import { useApi } from 'utils/hooks/useApi';
 
 import styles from './SignUpUser.module.scss';
 
@@ -26,7 +26,7 @@ export const SignUp = () => {
   const signUp = async (values: SignUpForm) => {
     try {
       setIsLoading(true);
-      await api.users.signUp(values);
+      await api.auth.signUp(values);
     } catch (e) {
       setError(e.response.data);
     } finally {
