@@ -39,7 +39,8 @@ export const SignIn = () => {
 
   const renderForm = ({ handleSubmit }: FormRenderProps<SignInForm>) => (
     <div className={styles.SignInForm}>
-      <AntForm onFinish={handleSubmit} className={styles.SignInForm}>
+      <h1>Sign In</h1>
+      <AntForm onFinish={handleSubmit}>
         <AntForm.Item>
           <TextInputField
             name="email"

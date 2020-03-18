@@ -24,7 +24,7 @@ class Users extends BaseApi {
   }
 
   @autobind
-  public async updateUser(userId: string, body: User) {
+  public async updateUser(userId: string, body: User & { password?: string, newPassword?: string }) {
     const response = await this.actions.put<UserResponse>({
       url: `/users/${userId}`, data: body, options: this.setHeaders(),
     });
