@@ -82,8 +82,8 @@ export const Profile = () => {
       <h1>
         Edit
         {' '}
-        {user?.email}
-        {' '}
+        {user?.name}
+        {'\'s '}
         profile
       </h1>
       <AntForm onFinish={handleSubmit}>

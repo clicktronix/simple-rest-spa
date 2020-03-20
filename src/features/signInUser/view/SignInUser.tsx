@@ -1,12 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
+import { useHistory } from 'react-router';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
 import { useApi } from 'utils/hooks/useApi';
 import { AuthContext } from 'services/auth';
+import { routes } from 'modules/routes';
 
 import styles from './SignInUser.module.scss';
 
@@ -19,6 +21,7 @@ type SignInForm = {
 
 export const SignIn = () => {
   const api = useApi();
+  const history = useHistory();
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,6 +31,7 @@ export const SignIn = () => {
       setIsLoading(true);
       const { data, tokens } = await api.auth.signIn(values);
       auth?.setAuth(data, tokens.accessToken);
+      history.push(routes.mainRoutes.MAIN);
     } catch (e) {
       setError(e.message);
     } finally {
