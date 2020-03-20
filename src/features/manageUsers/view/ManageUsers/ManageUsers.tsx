@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Table, Button, Typography } from 'antd';
 import { useHistory } from 'react-router';
+import { useMountedState } from 'react-use';
 
 import { useApi } from 'utils/hooks/useApi';
 import { User } from 'shared/types/models';
@@ -13,41 +14,41 @@ const { Text } = Typography;
 export const ManageUsers = () => {
   const api = useApi();
   const history = useHistory();
+  const isMounted = useMountedState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [users, setUsers] = useState<User[]>([]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true);
       const data = await api.users.getUsers();
-      if (data.length === 0) {
-        return;
-      }
-      setUsers(data.map((x, i) => ({
+      isMounted() && setUsers(data.map((x, i) => ({
         ...x,
         key: i,
       })));
+      isMounted() && setError('');
     } catch (e) {
-      setError(e.response.data);
+      isMounted() && setError(e.response.data);
     } finally {
-      setIsLoading(false);
+      isMounted() && setIsLoading(false);
     }
-  };
+  }, [api.users, isMounted]);
 
   const deleteUser = async (userId: string) => {
     try {
       setIsLoading(true);
       await api.users.deleteUser(userId);
+      isMounted() && setError('');
     } catch (e) {
-      setError(e.message);
+      isMounted() && setError(e.message);
     } finally {
-      setIsLoading(false);
+      isMounted() && setIsLoading(false);
     }
   };
 
   const makeEditUserHandler = (userId: string) => () => {
-    history.push(`${routes.userRoutes.USERS}/${userId}`);
+    history.push(`${routes.profileRoutes.PROFILE}/${userId}`);
   };
 
   const makeDeleteUserHandler = (userId: string) => async () => {
@@ -85,12 +86,11 @@ export const ManageUsers = () => {
         </Button>
       </>
     ),
-  },
-  ];
+  }];
 
   useEffect(() => {
-    !error && users.length === 0 && fetchUsers();
-  });
+    fetchUsers();
+  }, [fetchUsers]);
 
   return (
     <div className={styles.UsersWrapper}>

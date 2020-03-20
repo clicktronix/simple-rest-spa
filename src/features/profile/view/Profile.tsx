@@ -1,11 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
+import { useParams } from 'react-router';
+import { useMountedState } from 'react-use';
 
 import { AuthContext } from 'services/auth';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { useApi } from 'utils/hooks/useApi';
+import { User } from 'shared/types/models';
 
 import styles from './Profile.module.scss';
 
@@ -22,35 +25,67 @@ const { Text } = Typography;
 export const Profile = () => {
   const api = useApi();
   const auth = useContext(AuthContext);
+  const { userId } = useParams();
+  const isMounted = useMountedState();
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const initialValues: ProfileForm = {
+  const [user, setUser] = useState<User>();
+  const [initValues, setInitValues] = useState<ProfileForm>({
     name: '',
     surname: '',
     email: '',
     password: '',
     newPassword: '',
-    ...auth?.user,
-  };
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const isOwnProfile = userId === auth?.user?.id;
+
+  const fetchUserProfile = useCallback(async () => {
+    if (userId) {
+      try {
+        setIsLoading(true);
+        const usr = await api.users.getUser(userId);
+        isMounted() && setUser(usr);
+        isMounted() && setInitValues(state => ({
+          ...state, ...usr,
+        }));
+        isMounted() && setError('');
+      } catch (e) {
+        isMounted() && setError(e.message);
+      } finally {
+        isMounted() && setIsLoading(false);
+      }
+    }
+  }, [api.users, isMounted, userId]);
 
   const updateProfile = async (values: ProfileForm) => {
     try {
       setIsLoading(true);
-      auth?.user?.id && await api.users.updateUser(auth.user.id, {
-        ...values, id: auth.user.id,
+      userId && await api.users.updateUser(userId, {
+        ...values, id: userId,
       });
+      isMounted() && setError('');
     } catch (e) {
-      setError(e.message);
+      isMounted() && setError(e.message);
     } finally {
-      setIsLoading(false);
+      isMounted() && setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   const handleFormSubmit = (values: ProfileForm) => updateProfile(values);
 
   const renderForm = ({ handleSubmit }: FormRenderProps<ProfileForm>) => (
     <div className={styles.ProfileForm}>
-      <h1>Users profile</h1>
+      <h1>
+        Edit
+        {' '}
+        {user?.email}
+        {' '}
+        profile
+      </h1>
       <AntForm onFinish={handleSubmit}>
         <AntForm.Item>
           <TextInputField
@@ -70,18 +105,24 @@ export const Profile = () => {
             placeholder="Enter your email"
           />
         </AntForm.Item>
-        <AntForm.Item>
-          <TextInputField
-            name="password"
-            placeholder="Enter your current password"
-          />
-        </AntForm.Item>
-        <AntForm.Item>
-          <TextInputField
-            name="password"
-            placeholder="Enter your new password"
-          />
-        </AntForm.Item>
+        {isOwnProfile && (
+          <>
+            <AntForm.Item>
+              <TextInputField
+                name="password"
+                placeholder="Enter your current password"
+                password
+              />
+            </AntForm.Item>
+            <AntForm.Item>
+              <TextInputField
+                name="newPassword"
+                placeholder="Enter your new password"
+                password
+              />
+            </AntForm.Item>
+          </>
+        )}
         <AntForm.Item>
           <Button type="primary" htmlType="submit" loading={isLoading}>
             Save
@@ -96,7 +137,7 @@ export const Profile = () => {
     <Form<ProfileForm>
       onSubmit={handleFormSubmit}
       render={renderForm}
-      initialValues={initialValues}
+      initialValues={initValues}
       subscription={{}}
     />
   );

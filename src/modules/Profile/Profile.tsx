@@ -9,7 +9,7 @@ import { ProfileLayout } from './view/ProfileLayout';
 export class ProfileModule extends Module {
   public static getRoutes() {
     return [(
-      <Route exact key={routes.PROFILE} path={routes.PROFILE} component={ProfileLayout} />
+      <Route exact key={`${routes.PROFILE}/:userId`} path={`${routes.PROFILE}/:userId`} component={ProfileLayout} />
     )];
   }
 }

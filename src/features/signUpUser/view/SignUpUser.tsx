@@ -74,6 +74,7 @@ export const SignUp = () => {
             validate={composeValidators(
               makeRequired('Field required'),
             )}
+            password
           />
         </AntForm.Item>
         <AntForm.Item>

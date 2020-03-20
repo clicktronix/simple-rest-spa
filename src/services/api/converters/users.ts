@@ -2,7 +2,7 @@ import { User } from 'shared/types/models';
 
 import { UserResponse } from '../types/models/user';
 
-export function convertServerUser(data: UserResponse): User {
+export function convertServerUser(data: UserResponse['data']): User {
   return {
     id: data._id,
     name: data.name,

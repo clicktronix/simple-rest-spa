@@ -60,6 +60,8 @@ module.exports = {
     ],
     'arrow-parens': 'off',
     'no-underscore-dangle': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
   env: {
     jest: true,
@@ -76,5 +78,5 @@ module.exports = {
       },
     },
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint', 'prettier', 'react-hooks'],
 };
