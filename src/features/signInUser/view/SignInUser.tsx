@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
 import { useHistory } from 'react-router';
+import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
@@ -22,6 +23,7 @@ type SignInForm = {
 export const SignIn = () => {
   const api = useApi();
   const history = useHistory();
+  const isMounted = useMountedState();
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -33,9 +35,9 @@ export const SignIn = () => {
       auth?.setAuth(data, tokens.accessToken);
       history.push(routes.mainRoutes.MAIN);
     } catch (e) {
-      setError(e.message);
+      isMounted && setError(e.message);
     } finally {
-      setIsLoading(false);
+      isMounted && setIsLoading(false);
     }
   };
 

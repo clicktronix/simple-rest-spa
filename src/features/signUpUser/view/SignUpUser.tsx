@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
+import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
@@ -20,6 +21,7 @@ type SignUpForm = {
 
 export const SignUp = () => {
   const api = useApi();
+  const isMounted = useMountedState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -28,9 +30,9 @@ export const SignUp = () => {
       setIsLoading(true);
       await api.auth.signUp(values);
     } catch (e) {
-      setError(e.message);
+      isMounted && setError(e.message);
     } finally {
-      setIsLoading(false);
+      isMounted && setIsLoading(false);
     }
   };
 
