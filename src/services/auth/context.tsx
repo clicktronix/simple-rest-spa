@@ -12,10 +12,12 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const api = useApi();
   const { getToken, setToken, resetToken } = useToken(api.storage);
+
   const setAuth = (u: User, token: string) => {
     setUser(u);
     setToken(token);
   };
+
   const resetAuth = () => {
     setUser(null);
     resetToken();

@@ -36,7 +36,7 @@ export const Header = () => {
         {auth?.user
           ? (
             <Menu.Item key={routes.profileRoutes.PROFILE} className={styles.Button}>
-              <Link to={routes.profileRoutes.PROFILE}>
+              <Link to={`${routes.profileRoutes.PROFILE}/${auth.user.id}`}>
                 {auth.user.email}
               </Link>
             </Menu.Item>

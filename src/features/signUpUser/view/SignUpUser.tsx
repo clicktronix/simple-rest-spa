@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
+import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
@@ -20,6 +21,7 @@ type SignUpForm = {
 
 export const SignUp = () => {
   const api = useApi();
+  const isMounted = useMountedState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -28,9 +30,9 @@ export const SignUp = () => {
       setIsLoading(true);
       await api.auth.signUp(values);
     } catch (e) {
-      setError(e.response.data);
+      isMounted && setError(e.message);
     } finally {
-      setIsLoading(false);
+      isMounted && setIsLoading(false);
     }
   };
 
@@ -38,6 +40,7 @@ export const SignUp = () => {
 
   const renderForm = ({ handleSubmit }: FormRenderProps<SignUpForm>) => (
     <div className={styles.SignUpForm}>
+      <h1>Sign Up</h1>
       <AntForm onFinish={handleSubmit} className={styles.SignInForm}>
         <AntForm.Item>
           <TextInputField
@@ -73,6 +76,7 @@ export const SignUp = () => {
             validate={composeValidators(
               makeRequired('Field required'),
             )}
+            password
           />
         </AntForm.Item>
         <AntForm.Item>

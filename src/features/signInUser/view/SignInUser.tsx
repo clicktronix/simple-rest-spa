@@ -1,12 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
+import { useHistory } from 'react-router';
+import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
 import { useApi } from 'utils/hooks/useApi';
 import { AuthContext } from 'services/auth';
+import { routes } from 'modules/routes';
 
 import styles from './SignInUser.module.scss';
 
@@ -19,6 +22,8 @@ type SignInForm = {
 
 export const SignIn = () => {
   const api = useApi();
+  const history = useHistory();
+  const isMounted = useMountedState();
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -26,12 +31,13 @@ export const SignIn = () => {
   const signIn = async (values: SignInForm) => {
     try {
       setIsLoading(true);
-      const { data } = await api.auth.signIn(values);
-      auth?.setAuth(data.data, data.token.accessToken);
+      const { data, tokens } = await api.auth.signIn(values);
+      auth?.setAuth(data, tokens.accessToken);
+      history.push(routes.mainRoutes.MAIN);
     } catch (e) {
-      setError(e.response.data);
+      isMounted && setError(e.message);
     } finally {
-      setIsLoading(false);
+      isMounted && setIsLoading(false);
     }
   };
 
@@ -39,7 +45,8 @@ export const SignIn = () => {
 
   const renderForm = ({ handleSubmit }: FormRenderProps<SignInForm>) => (
     <div className={styles.SignInForm}>
-      <AntForm onFinish={handleSubmit} className={styles.SignInForm}>
+      <h1>Sign In</h1>
+      <AntForm onFinish={handleSubmit}>
         <AntForm.Item>
           <TextInputField
             name="email"
@@ -56,6 +63,7 @@ export const SignIn = () => {
             validate={composeValidators(
               makeRequired('Field required'),
             )}
+            password
           />
         </AntForm.Item>
         <AntForm.Item>
