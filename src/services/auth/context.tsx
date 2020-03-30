@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAsync, useMountedState } from 'react-use';
 
 import { useToken } from 'utils/hooks/useToken';
 import { useApi } from 'utils/hooks/useApi';
@@ -9,9 +10,27 @@ import { Auth } from './types';
 export const AuthContext = React.createContext<Auth | null>(null);
 
 export const AuthContextProvider: React.FC = ({ children }) => {
+  const isMounted = useMountedState();
+  const [isLoading, setIsLoading] = useState();
+  const [error, setError] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const api = useApi();
   const { getToken, setToken, resetToken } = useToken(api.storage);
+
+  useAsync(async () => {
+    if (!user && getToken()) {
+      try {
+        setIsLoading(true);
+        const u = await api.auth.signInByToken();
+        isMounted() && setUser(u.data);
+        isMounted() && setToken(u.tokens.accessToken);
+      } catch (e) {
+        isMounted() && setError(e.message);
+      } finally {
+        isMounted() && setIsLoading(false);
+      }
+    }
+  });
 
   const setAuth = (u: User, token: string) => {
     setUser(u);
@@ -29,7 +48,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         user, token: getToken(), setAuth, resetAuth,
       }}
     >
-      {children}
+      {(!isLoading || !error) ? children : null}
     </AuthContext.Provider>
   );
 };
