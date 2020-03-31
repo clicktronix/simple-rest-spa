@@ -6,14 +6,14 @@ import { routes } from 'modules/routes';
 import { App } from 'core/App';
 
 export const Core = () => (
-  <BrowserRouter>
-    <App>
+  <App>
+    <BrowserRouter>
       <Route path="/">
         <Switch>
           {Object.values(modules).map(x => x.getRoutes())}
           <Redirect to={routes.mainRoutes.MAIN} />
         </Switch>
       </Route>
-    </App>
-  </BrowserRouter>
+    </BrowserRouter>
+  </App>
 );

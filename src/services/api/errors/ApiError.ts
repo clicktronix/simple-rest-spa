@@ -22,11 +22,3 @@ export class ApiError extends Error {
     this.response = response;
   }
 }
-
-export function isApiError(error: any): error is ApiError {
-  return error && error.status && error instanceof Error;
-}
-
-export function isServerError(error: any): boolean {
-  return isApiError(error) && error.status > 500;
-}

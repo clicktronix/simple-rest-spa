@@ -2,17 +2,17 @@ import { AuthUser } from 'shared/types/models';
 
 import { AuthResponse } from '../types/models/auth';
 
-export function convertServerAuth(data: AuthResponse): AuthUser {
+export function convertServerAuth({ user, token }: AuthResponse): AuthUser {
   return {
     data: {
-      id: data.user._id,
-      name: data.user.name,
-      surname: data.user.surname,
-      email: data.user.email,
+      id: user._id,
+      name: user.name,
+      surname: user.surname,
+      email: user.email,
     },
     tokens: {
-      accessToken: data.token.accessToken,
-      refreshToken: data.token.refreshToken,
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
     },
   };
 }
