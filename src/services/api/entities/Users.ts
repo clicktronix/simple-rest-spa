@@ -4,7 +4,7 @@ import { User } from 'shared/types/models';
 
 import { BaseApi } from './BaseApi';
 import { UsersResponse, UserResponse } from '../types/models/user';
-import { convertServerUser } from '../converters/users';
+import { convertServerUser, convertServerUsers } from '../converters/users';
 
 class Users extends BaseApi {
   @autobind
@@ -12,7 +12,7 @@ class Users extends BaseApi {
     const response = await this.actions.get<UsersResponse>({
       url: '/users', options: this.setHeaders(),
     });
-    return response.data.data.map(convertServerUser);
+    return Users.handleResponse(response, convertServerUsers);
   }
 
   @autobind

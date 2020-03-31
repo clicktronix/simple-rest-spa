@@ -1,5 +1,5 @@
 export type UserResponse = {
-  data: {
+  user: {
     _id: string;
     email: string;
     name: string;
@@ -10,5 +10,5 @@ export type UserResponse = {
 };
 
 export type UsersResponse = {
-  data: UserResponse['data'][];
+  users: UserResponse['user'][];
 };

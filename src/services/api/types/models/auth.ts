@@ -1,7 +1,7 @@
 import { UserResponse } from './user';
 
 export type AuthResponse = {
-  data: UserResponse['data'];
+  user: UserResponse['user'];
   token: TokenResponse;
 };
 

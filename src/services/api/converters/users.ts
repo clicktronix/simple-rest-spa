@@ -1,12 +1,16 @@
 import { User } from 'shared/types/models';
 
-import { UserResponse } from '../types/models/user';
+import { UserResponse, UsersResponse } from '../types/models/user';
 
-export function convertServerUser(data: UserResponse['data']): User {
+export function convertServerUser({ user }: UserResponse): User {
   return {
-    id: data._id,
-    name: data.name,
-    surname: data.surname,
-    email: data.email,
+    id: user._id,
+    name: user.name,
+    surname: user.surname,
+    email: user.email,
   };
+}
+
+export function convertServerUsers({ users }: UsersResponse): User[] {
+  return users.map(x => convertServerUser({ user: x }));
 }
