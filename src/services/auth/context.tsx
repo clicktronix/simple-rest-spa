@@ -20,8 +20,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const refreshTokenInterceptor = async () => {
     try {
       setIsLoading(true);
-      const { token } = await api.auth.updateTokens();
-      isMounted() && setToken(token.accessToken, token.refreshToken);
+      const tokens = await api.auth.updateTokens();
+      isMounted() && setToken(tokens.accessToken, tokens.refreshToken);
       const u = await api.auth.signInByToken();
       isMounted() && setUser(u.data);
     } catch (e) {

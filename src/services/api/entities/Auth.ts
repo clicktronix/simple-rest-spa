@@ -38,7 +38,7 @@ class Auth extends BaseApi {
       options: this.setHeaders(),
       data: { refreshToken: this.refreshToken },
     });
-    return response;
+    return response.data.token;
   }
 }
 
