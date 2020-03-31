@@ -11,8 +11,8 @@ export const AuthContext = React.createContext<Auth | null>(null);
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const isMounted = useMountedState();
-  const [, setError] = useState('');
-  const [, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState();
+  const [error, setError] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const api = useApi();
   const { getToken, setToken, resetToken } = useToken(api.storage);
@@ -61,7 +61,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         user, token: getToken(), setAuth, resetAuth,
       }}
     >
-      {children}
+      {(!isLoading || !error) ? children : null}
     </AuthContext.Provider>
   );
 };
