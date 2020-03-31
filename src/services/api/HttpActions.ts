@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosPromise } from 'axios';
 
-import { ErrorResponse, HttpActionParams, Interceptors } from './types';
+import { InterceptorErrorResponse, HttpActionParams, Interceptors } from './types';
 
 class HttpActions {
   private request: AxiosInstance;
@@ -43,7 +43,7 @@ class HttpActions {
   public initInterceptors({ refreshTokenInterceptor }: Interceptors) {
     this.request.interceptors.response.use(
       response => response,
-      (error: ErrorResponse) => {
+      (error: InterceptorErrorResponse) => {
         const { response, config } = error;
 
         if (config.url === '/authenticate/refresh') {
@@ -52,7 +52,7 @@ class HttpActions {
 
         if (response.status === 401 && !this.isRefreshing) {
           this.isRefreshing = true;
-          refreshTokenInterceptor().catch(err => err).finally(() => {
+          refreshTokenInterceptor().catch(e => e).finally(() => {
             this.isRefreshing = false;
           });
         }

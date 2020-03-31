@@ -20,7 +20,7 @@ class Auth extends BaseApi {
     const response = await this.actions.post<AuthResponse>({
       url: '/authenticate', data,
     });
-    return convertServerAuth(response.data);
+    return Auth.handleResponse(response, convertServerAuth);
   }
 
   @autobind
@@ -28,17 +28,17 @@ class Auth extends BaseApi {
     const response = await this.actions.get<AuthResponse>({
       url: '/token-authenticate', options: this.setHeaders(),
     });
-    return convertServerAuth(response.data);
+    return Auth.handleResponse(response, convertServerAuth);
   }
 
   @autobind
   public async updateTokens() {
-    const response = await this.actions.get<{ token: TokenResponse }>({
+    const response = await this.actions.post<{ token: TokenResponse }>({
       url: '/authenticate/refresh',
       options: this.setHeaders(),
       data: { refreshToken: this.refreshToken },
     });
-    return response.data.token;
+    return response;
   }
 }
 

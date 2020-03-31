@@ -1,5 +1,12 @@
+import { AxiosResponse } from 'axios';
+
+import { isDataResponse } from 'shared/types/guards';
+
 import { HttpActions } from '../HttpActions';
 import { Storage } from '../storage';
+import { Converter } from '../types';
+import { isErrorStatus } from '../errors/isErrorStatus';
+import { ApiError } from '../errors/ApiError';
 
 class BaseApi {
   protected actions: HttpActions;
@@ -28,6 +35,31 @@ class BaseApi {
 
   protected setHeaders() {
     return { headers: { Authorization: this.token } };
+  }
+
+  protected static handleResponse<ResponseData, Result>(
+    response: AxiosResponse,
+    converter?: Converter<ResponseData, Result> | null,
+  ): Result {
+    const responseData = (() => {
+      if (isDataResponse<ResponseData>(response.data)) {
+        return response.data.data;
+      }
+      return response.data;
+    })();
+    if (isErrorStatus(response.status)) {
+      const { config, status, request } = response;
+      throw new ApiError({
+        config,
+        status,
+        request,
+        response,
+      });
+    }
+    if (converter) {
+      return converter(responseData as ResponseData);
+    }
+    return responseData;
   }
 }
 

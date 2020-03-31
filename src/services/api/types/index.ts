@@ -6,7 +6,7 @@ export type HttpActionParams = {
   data?: any;
 };
 
-export type ErrorResponse = {
+export type InterceptorErrorResponse = {
   status: number;
   message: string;
   config: AxiosRequestConfig;
@@ -15,6 +15,18 @@ export type ErrorResponse = {
   data?: any
 };
 
+export type Converter<R, T> = (resp: R) => T;
+
 export type Interceptors = {
   refreshTokenInterceptor: () => Promise<void>;
+};
+
+export type DataResponse<R> = {
+  data: R;
+  request: XMLHttpRequest;
+};
+
+export type ErrorResponse = {
+  message?: string;
+  code?: number;
 };

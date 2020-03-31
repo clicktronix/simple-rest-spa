@@ -7,13 +7,13 @@ import { App } from 'core/App';
 
 export const Core = () => (
   <BrowserRouter>
-    <Route path="/">
-      <App>
+    <App>
+      <Route path="/">
         <Switch>
           {Object.values(modules).map(x => x.getRoutes())}
           <Redirect to={routes.mainRoutes.MAIN} />
         </Switch>
-      </App>
-    </Route>
+      </Route>
+    </App>
   </BrowserRouter>
 );
