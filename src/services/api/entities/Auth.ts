@@ -22,6 +22,14 @@ class Auth extends BaseApi {
     });
     return convertServerAuth(response.data);
   }
+
+  @autobind
+  public async signInByToken() {
+    const response = await this.actions.get<AuthResponse>({
+      url: '/token-authenticate', options: this.setHeaders(),
+    });
+    return convertServerAuth(response.data);
+  }
 }
 
 export { Auth };
