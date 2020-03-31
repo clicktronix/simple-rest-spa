@@ -23,7 +23,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         setIsLoading(true);
         const u = await api.auth.signInByToken();
         isMounted() && setUser(u.data);
-        isMounted() && setToken(u.tokens.accessToken);
+        isMounted() && setToken(u.tokens.accessToken, u.tokens.refreshToken);
       } catch (e) {
         isMounted() && setError(e.message);
       } finally {
@@ -32,9 +32,9 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     }
   });
 
-  const setAuth = (u: User, token: string) => {
+  const setAuth = (u: User, token: string, refreshToken: string) => {
     setUser(u);
-    setToken(token);
+    setToken(token, refreshToken);
   };
 
   const resetAuth = () => {
