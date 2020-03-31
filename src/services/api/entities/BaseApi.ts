@@ -13,6 +13,14 @@ class BaseApi {
     this.storage.set('token', t);
   }
 
+  get refreshToken() {
+    return this.storage.get<string, null>('refreshToken', null);
+  }
+
+  set refreshToken(t: string | null) {
+    this.storage.set('refreshToken', t);
+  }
+
   constructor(actions: HttpActions, storage: Storage) {
     this.actions = actions;
     this.storage = storage;
