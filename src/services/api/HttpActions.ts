@@ -44,11 +44,7 @@ class HttpActions {
     this.request.interceptors.response.use(
       response => response,
       (error: InterceptorErrorResponse) => {
-        const { response, config } = error;
-
-        if (config.url === '/authenticate/refresh') {
-          return error;
-        }
+        const { response } = error;
 
         if (response.status === 401 && !this.isRefreshing) {
           this.isRefreshing = true;

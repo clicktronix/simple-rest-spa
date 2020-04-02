@@ -9,10 +9,9 @@ import { convertServerAuth } from '../converters/auth';
 class Auth extends BaseApi {
   @autobind
   public async signUp(data: RegisterUser) {
-    const response = await this.actions.post<AuthResponse>({
+    await this.actions.post<AuthResponse>({
       url: '/register', data,
     });
-    return response;
   }
 
   @autobind
@@ -38,7 +37,7 @@ class Auth extends BaseApi {
       options: this.setHeaders(),
       data: { refreshToken: this.refreshToken },
     });
-    return response.data.token;
+    return Auth.handleResponse(response, (data: { token: TokenResponse }) => data.token);
   }
 }
 
