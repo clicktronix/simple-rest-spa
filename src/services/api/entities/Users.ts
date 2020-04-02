@@ -4,7 +4,7 @@ import { User } from 'shared/types/models';
 
 import { BaseApi } from './BaseApi';
 import { UsersResponse, UserResponse } from '../types/models/user';
-import { convertServerUser } from '../converters/users';
+import { convertServerUser, convertServerUsers } from '../converters/users';
 
 class Users extends BaseApi {
   @autobind
@@ -12,7 +12,7 @@ class Users extends BaseApi {
     const response = await this.actions.get<UsersResponse>({
       url: '/users', options: this.setHeaders(),
     });
-    return response.data.data.map(convertServerUser);
+    return Users.handleResponse(response, convertServerUsers);
   }
 
   @autobind
@@ -20,7 +20,7 @@ class Users extends BaseApi {
     const response = await this.actions.get<UserResponse>({
       url: `/users/${userId}`, options: this.setHeaders(),
     });
-    return convertServerUser(response.data.data);
+    return Users.handleResponse(response, convertServerUser);
   }
 
   @autobind
@@ -28,7 +28,7 @@ class Users extends BaseApi {
     const response = await this.actions.put<UserResponse>({
       url: `/users/${userId}`, data: body, options: this.setHeaders(),
     });
-    return convertServerUser(response.data.data);
+    return Users.handleResponse(response, convertServerUser);
   }
 
   @autobind
@@ -37,7 +37,7 @@ class Users extends BaseApi {
       url: `/users/${userId}`,
       options: this.setHeaders(),
     });
-    return convertServerUser(response.data.data);
+    return Users.handleResponse(response, convertServerUser);
   }
 }
 

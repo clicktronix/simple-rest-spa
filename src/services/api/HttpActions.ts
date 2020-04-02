@@ -1,22 +1,17 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosPromise } from 'axios';
 
-type HttpActionParams = {
-  url: string;
-  options?: AxiosRequestConfig;
-  data?: any;
-};
+import { InterceptorErrorResponse, HttpActionParams, Interceptors } from './types';
 
 class HttpActions {
   private request: AxiosInstance;
+  private isRefreshing: boolean = false;
 
   constructor(baseURL: string, headers?: AxiosRequestConfig['headers']) {
-    const config: AxiosRequestConfig = {
+    this.request = axios.create({
       baseURL,
       headers,
       withCredentials: false,
-    };
-
-    this.request = axios.create(config);
+    });
   }
 
   public get<T>({ url, data, options }: HttpActionParams): AxiosPromise<T> {
@@ -43,6 +38,24 @@ class HttpActions {
 
   public put<T>({ url, data, options }: HttpActionParams): AxiosPromise<T> {
     return this.request.put(url, data, { ...options });
+  }
+
+  public initInterceptors({ refreshTokenInterceptor }: Interceptors) {
+    this.request.interceptors.response.use(
+      response => response,
+      (error: InterceptorErrorResponse) => {
+        const { response } = error;
+
+        if (response.status === 401 && !this.isRefreshing) {
+          this.isRefreshing = true;
+          refreshTokenInterceptor().catch(e => e).finally(() => {
+            this.isRefreshing = false;
+          });
+        }
+
+        return error;
+      },
+    );
   }
 }
 

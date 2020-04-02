@@ -29,7 +29,7 @@ export const ManageUsers = () => {
       })));
       isMounted() && setError('');
     } catch (e) {
-      isMounted() && setError(e.response.data);
+      isMounted() && setError(e.message);
     } finally {
       isMounted() && setIsLoading(false);
     }

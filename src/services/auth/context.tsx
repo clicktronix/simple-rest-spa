@@ -11,13 +11,38 @@ export const AuthContext = React.createContext<Auth | null>(null);
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const isMounted = useMountedState();
-  const [isLoading, setIsLoading] = useState();
-  const [error, setError] = useState('');
+  const [, setIsLoading] = useState();
+  const [, setError] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const api = useApi();
   const { getToken, setToken, resetToken } = useToken(api.storage);
 
+  const refreshTokenInterceptor = async () => {
+    try {
+      setIsLoading(true);
+      const tokens = await api.auth.updateTokens();
+      isMounted() && setToken(tokens.accessToken, tokens.refreshToken);
+      const u = await api.auth.signInByToken();
+      isMounted() && setUser(u.data);
+    } catch (e) {
+      isMounted() && setError(e.message);
+    } finally {
+      isMounted() && setIsLoading(false);
+    }
+  };
+
+  const setAuth = (u: User, token: string, refreshToken: string) => {
+    setUser(u);
+    setToken(token, refreshToken);
+  };
+
+  const resetAuth = () => {
+    setUser(null);
+    resetToken();
+  };
+
   useAsync(async () => {
+    api.initAuthInterceptors({ refreshTokenInterceptor });
     if (!user && getToken()) {
       try {
         setIsLoading(true);
@@ -32,23 +57,13 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     }
   });
 
-  const setAuth = (u: User, token: string, refreshToken: string) => {
-    setUser(u);
-    setToken(token, refreshToken);
-  };
-
-  const resetAuth = () => {
-    setUser(null);
-    resetToken();
-  };
-
   return (
     <AuthContext.Provider
       value={{
-        user, token: getToken(), setAuth, resetAuth,
+        user, setAuth, resetAuth,
       }}
     >
-      {(!isLoading || !error) ? children : null}
+      {children}
     </AuthContext.Provider>
   );
 };

@@ -33,7 +33,7 @@ export const SignIn = () => {
       setIsLoading(true);
       const { data, tokens } = await api.auth.signIn(values);
       auth?.setAuth(data, tokens.accessToken, tokens.refreshToken);
-      history.push(routes.mainRoutes.MAIN);
+      isMounted && history.push(routes.mainRoutes.MAIN);
     } catch (e) {
       isMounted && setError(e.message);
     } finally {
