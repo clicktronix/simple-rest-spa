@@ -11,7 +11,7 @@ export const AuthContext = React.createContext<Auth | null>(null);
 
 export const AuthContextProvider: React.FC = ({ children }) => {
   const isMounted = useMountedState();
-  const [, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState();
   const [, setError] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const api = useApi();
@@ -60,7 +60,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user, setAuth, resetAuth,
+        user, setAuth, resetAuth, isLoading,
       }}
     >
       {children}
