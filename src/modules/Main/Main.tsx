@@ -9,7 +9,7 @@ import { MainLayout } from './view/MainLayout';
 export class MainModule extends Module {
   public static getRoutes() {
     return [(
-      <Route exact key={routes.MAIN} path={routes.MAIN} component={MainLayout} />
+      <Route path={routes.MAIN} component={MainLayout} exact />
     )];
   }
 }

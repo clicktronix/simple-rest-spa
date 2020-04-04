@@ -4,7 +4,7 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { routes } from 'modules/routes';
 import { AuthContext } from 'services/auth';
 
-export const PrivateRoute = ({ component, ...routeProps }: RouteProps) => {
+export const PrivateRoute = ({ component, location, ...routeProps }: RouteProps) => {
   const auth = useContext(AuthContext);
   const Component = component !== undefined ? component : () => null;
 
@@ -16,5 +16,5 @@ export const PrivateRoute = ({ component, ...routeProps }: RouteProps) => {
     </>
   );
 
-  return <Route {...routeProps} render={renderComponent} />;
+  return <Route key={location?.pathname} {...routeProps} render={renderComponent} />;
 };

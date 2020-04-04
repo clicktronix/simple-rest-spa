@@ -21,3 +21,11 @@ export type RegisterUser = {
   surname: string;
   password: string;
 };
+
+export type UpdateUser = {
+  name: string;
+  email: string;
+  surname: string;
+  password: string;
+  newPassword: string;
+};
