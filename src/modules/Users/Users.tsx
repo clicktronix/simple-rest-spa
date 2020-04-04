@@ -9,7 +9,7 @@ import { UsersLayout } from './view/UsersLayout';
 export class UsersModule extends Module {
   public static getRoutes() {
     return [(
-      <PrivateRoute exact key={routes.USERS} path={routes.USERS} component={UsersLayout} />
+      <PrivateRoute path={routes.USERS} component={UsersLayout} exact />
     )];
   }
 }

@@ -10,12 +10,13 @@ import { Auth } from './types';
 export const AuthContext = React.createContext<Auth | null>(null);
 
 export const AuthContextProvider: React.FC = ({ children }) => {
-  const isMounted = useMountedState();
-  const [isLoading, setIsLoading] = useState();
-  const [, setError] = useState('');
-  const [user, setUser] = useState<User | null>(null);
   const api = useApi();
   const { getToken, setToken, resetToken } = useToken(api.storage);
+  const isMounted = useMountedState();
+  const isLoadingRequired = Boolean(getToken());
+  const [isLoading, setIsLoading] = useState(isLoadingRequired);
+  const [, setError] = useState('');
+  const [user, setUser] = useState<User | null>(null);
 
   const refreshTokenInterceptor = async () => {
     try {

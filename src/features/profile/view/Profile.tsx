@@ -8,7 +8,7 @@ import { AuthContext } from 'services/auth';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { useApi } from 'utils/hooks/useApi';
-import { User } from 'shared/types/models';
+import { UpdateUser } from 'shared/types/models';
 
 import styles from './Profile.module.scss';
 
@@ -23,19 +23,19 @@ type ProfileForm = {
 const { Text } = Typography;
 
 export const Profile = () => {
-  const api = useApi();
-  const auth = useContext(AuthContext);
-  const { userId } = useParams();
-  const isMounted = useMountedState();
-  const [error, setError] = useState('');
-  const [user, setUser] = useState<User>();
-  const [initValues, setInitValues] = useState<ProfileForm>({
+  const initialUser = {
     name: '',
     surname: '',
     email: '',
     password: '',
     newPassword: '',
-  });
+  };
+  const api = useApi();
+  const auth = useContext(AuthContext);
+  const { userId } = useParams();
+  const isMounted = useMountedState();
+  const [error, setError] = useState('');
+  const [user, setUser] = useState<UpdateUser>(initialUser);
   const [isLoading, setIsLoading] = useState(false);
   const isOwnProfile = userId === auth?.user?.id;
 
@@ -44,8 +44,7 @@ export const Profile = () => {
       try {
         setIsLoading(true);
         const usr = await api.users.getUser(userId);
-        isMounted() && setUser(usr);
-        isMounted() && setInitValues(state => ({
+        isMounted() && setUser(state => ({
           ...state, ...usr,
         }));
         isMounted() && setError('');
@@ -137,7 +136,7 @@ export const Profile = () => {
     <Form<ProfileForm>
       onSubmit={handleFormSubmit}
       render={renderForm}
-      initialValues={initValues}
+      initialValues={user}
       subscription={{}}
     />
   );

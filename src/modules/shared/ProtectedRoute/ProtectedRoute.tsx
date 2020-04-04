@@ -4,12 +4,11 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { routes } from 'modules/routes';
 import { AuthContext } from 'services/auth';
 
-export const PrivateRoute = ({ component, ...routeProps }: RouteProps) => {
+export const PrivateRoute = ({ component, location, ...routeProps }: RouteProps) => {
   const auth = useContext(AuthContext);
   const Component = component !== undefined ? component : () => null;
-  console.log(auth?.isLoading);
 
-  const renderData = () => (
+  const renderComponent = () => (
     <>
       {auth?.user
         ? (<Component />)
@@ -17,13 +16,5 @@ export const PrivateRoute = ({ component, ...routeProps }: RouteProps) => {
     </>
   );
 
-  const renderComponent = () => (
-    <>
-      {auth?.isLoading
-        ? (<div>Loading</div>)
-        : renderData()}
-    </>
-  );
-
-  return <Route {...routeProps} render={renderComponent} />;
+  return <Route key={location?.pathname} {...routeProps} render={renderComponent} />;
 };
