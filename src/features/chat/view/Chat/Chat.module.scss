@@ -1,0 +1,40 @@
+@import '~shared/styles/functions';
+@import '~shared/styles/variables';
+
+.Window {
+  position: absolute;
+  right: rem(10);
+  bottom: rem(40);
+  width: rem(350);
+}
+
+.Header {
+  padding: rem(3);
+  background-color: $white-grey;
+  cursor: pointer;
+}
+
+.Content {
+  padding: rem(3);
+  margin-bottom: rem(35);
+  height: rem(500);
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  border: 1px solid $white-grey;
+}
+
+.InputWrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+}
+
+.SlideUp {
+  display: none;
+}
+
+.SlideDown {
+  display: flex;
+}

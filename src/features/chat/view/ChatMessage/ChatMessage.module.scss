@@ -1,0 +1,11 @@
+@import '~shared/styles/functions';
+@import '~shared/styles/variables';
+
+.Wrapper {
+  display: block;
+  padding: rem(3);
+  margin: rem(4);
+  width: rem(300);
+  border-radius: 5px;
+  background-color: $white-blue;
+}
