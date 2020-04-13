@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { Form, FormRenderProps } from 'react-final-form';
-import { Form as AntForm, Typography, Button } from 'antd';
+import { Typography, Button } from 'antd';
 
 import { TextInputField } from 'shared/view/fields';
 
@@ -16,17 +16,20 @@ const { Text } = Typography;
 
 export const Chat = () => {
   const [isRollUp, setIsRollUp] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isLoading] = useState(false);
+  const [error] = useState('');
+  const [messages, setMessages] = useState<string[]>([]);
 
-  const handleFormSubmit = (values: ChatForm) => console.info(values);
+  const handleFormSubmit = (values: ChatForm) => {
+    setMessages(state => [...state, values.message]);
+  };
 
   const onHeaderClick = () => {
     setIsRollUp(state => !state);
   };
 
   const renderForm = ({ handleSubmit }: FormRenderProps<ChatForm>) => (
-    <AntForm onFinish={handleSubmit}>
+    <form onSubmit={handleSubmit} autoComplete="off">
       <div
         className={cn(
           styles.Content,
@@ -36,22 +39,11 @@ export const Chat = () => {
           },
         )}
       >
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
+        {messages.map((x, i) => (
+          <ChatMessage key={i}>
+            {x}
+          </ChatMessage>
+        ))}
       </div>
       <div
         className={cn(
@@ -71,7 +63,7 @@ export const Chat = () => {
         </Button>
       </div>
       {error && <Text type="danger">{error}</Text>}
-    </AntForm>
+    </form>
   );
 
   return (
