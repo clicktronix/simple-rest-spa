@@ -29,3 +29,8 @@ export type UpdateUser = {
   password: string;
   newPassword: string;
 };
+
+export type Message = {
+  content: string;
+  sender: User;
+};

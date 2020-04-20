@@ -5,4 +5,7 @@ import * as dotenv from 'dotenv';
  */
 dotenv.config();
 
-export const CONFIG = { baseUrl: process.env.BASE_URL || 'https://mysterious-cove-46705.herokuapp.com' };
+export const CONFIG = {
+  baseUrl: process.env.BASE_URL || 'https://localhost:8080',
+  socketsPort: process.env.SOCKETS_PORT || '8081',
+};

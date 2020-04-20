@@ -9,9 +9,9 @@ import { Socket } from './sockets';
 
 class Api {
   private actions: HttpActions;
-  private socket: Socket;
   private headers = {};
 
+  public socket: Socket;
   public users: Users;
   public auth: Auth;
 
