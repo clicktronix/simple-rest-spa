@@ -3,17 +3,16 @@ import { autobind } from 'core-decorators';
 import { fromEvent, Observable } from 'rxjs';
 
 import { Message } from 'shared/types/models';
+import { CONFIG } from 'core/config';
 
 import { MessageResponse } from '../types/models/message';
-
-// import { CONFIG } from 'core/config';
 
 export class Socket {
   private io: SocketIOClient.Socket = {} as SocketIOClient.Socket;
 
   @autobind
   public init() {
-    this.io = io.connect('http://localhost:8081/', {
+    this.io = io.connect(CONFIG.baseUrl, {
       transports: ['websocket'],
       port: '8081',
     });
