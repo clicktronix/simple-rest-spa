@@ -14,7 +14,7 @@ export class Socket {
   public init() {
     this.io = io.connect(CONFIG.baseUrl, {
       transports: ['websocket'],
-      port: '8081',
+      port: CONFIG.socketsPort,
     });
     this.io.on('connect', () => console.info('Socket connected'));
     this.io.on('disconnect', () => console.info('Socket disconnected'));
