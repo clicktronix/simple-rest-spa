@@ -6,6 +6,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export const CONFIG = {
-  baseUrl: process.env.PUBLIC_URL || 'https://localhost:8080',
-  socketsPort: process.env.SOCKETS_PORT || '8081',
+  baseUrl: process.env.REACT_APP_BASE_URL || 'https://localhost:8080',
+  socketsPort: process.env.REACT_APP_SOCKETS_PORT || '8081',
 };
