@@ -12,10 +12,7 @@ export class Socket {
 
   @autobind
   public init() {
-    this.io = io.connect(CONFIG.baseUrl, {
-      transports: ['websocket'],
-      port: CONFIG.socketsPort,
-    });
+    this.io = io.connect(CONFIG.baseUrl, { transports: ['websocket'] });
     this.io.on('connect', () => console.info('Socket connected'));
     this.io.on('disconnect', () => console.info('Socket disconnected'));
   }
