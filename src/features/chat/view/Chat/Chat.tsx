@@ -44,39 +44,49 @@ export const Chat = () => {
     });
   }, [api.socket]);
 
-  const renderForm = ({ handleSubmit }: FormRenderProps<ChatForm>) => (
-    <form onSubmit={handleSubmit} autoComplete="off">
-      <div
-        className={cn(styles.Content, {
-          [styles.SlideUp]: isRollUp,
-          [styles.SlideDown]: !isRollUp,
-        })}
-      >
-        {auth?.user && (
-          <div className={cn(styles.InputWrapper)}>
-            <TextInputField
-              name="message"
-              placeholder="Enter your message"
-            />
-            <Button type="primary" htmlType="submit" loading={isLoading} className={styles.SendButton}>
-              Send
-            </Button>
+  const renderForm = ({ form, handleSubmit }: FormRenderProps<ChatForm>) => {
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      handleSubmit(event);
+      form.reset();
+    };
+
+    return (
+      <form onSubmit={onSubmit} autoComplete="off">
+        <div
+          className={cn(styles.Content, {
+            [styles.SlideUp]: isRollUp,
+            [styles.SlideDown]: !isRollUp,
+          })}
+        >
+          {auth?.user && (
+            <div className={cn(styles.InputWrapper)}>
+              <TextInputField
+                name="message"
+                placeholder="Enter your message"
+              />
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={isLoading}
+                className={styles.SendButton}
+              >
+                Send
+              </Button>
+            </div>
+          )}
+          {error && <Text type="danger">{error}</Text>}
+          <div className={styles.Messages}>
+            {messages.map((x, i) => (
+              <ChatMessage
+                key={`${x.sender.email}_${i}`}
+                message={x}
+              />
+            ))}
           </div>
-        )}
-        {error && <Text type="danger">{error}</Text>}
-        <div className={styles.Messages}>
-          {messages.map((x, i) => (
-            <ChatMessage
-              key={`${x.sender.email}_${i}`}
-              className={cn({ [styles.OwnMessage]: x.sender.email === auth?.user?.email })}
-            >
-              {x.content}
-            </ChatMessage>
-          ))}
         </div>
-      </div>
-    </form>
-  );
+      </form>
+    );
+  };
 
   return (
     <div className={styles.Window}>

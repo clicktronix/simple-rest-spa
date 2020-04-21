@@ -62,11 +62,6 @@
   height: rem(400);
 }
 
-.OwnMessage {
-  align-self: flex-end;
-  background-color: $white-blue !important;
-}
-
 @keyframes openChat {
   0% {
     height: 0px;
