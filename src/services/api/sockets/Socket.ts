@@ -8,10 +8,9 @@ import { CONFIG } from 'core/config';
 import { MessageResponse } from '../types/models/message';
 
 export class Socket {
-  private io: SocketIOClient.Socket = {} as SocketIOClient.Socket;
+  private io: SocketIOClient.Socket;
 
-  @autobind
-  public init() {
+  constructor() {
     this.io = io.connect(CONFIG.baseUrl, { transports: ['websocket'] });
     this.io.on('connect', () => console.info('Socket connected'));
     this.io.on('disconnect', () => console.info('Socket disconnected'));

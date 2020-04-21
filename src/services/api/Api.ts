@@ -8,12 +8,11 @@ import { Interceptors } from './types';
 import { Socket } from './sockets';
 
 class Api {
-  private actions: HttpActions;
-  private headers = {};
-
   public socket: Socket;
   public users: Users;
   public auth: Auth;
+  private actions: HttpActions;
+  private headers = {};
 
   constructor(public storage: Storage) {
     this.actions = new HttpActions(CONFIG.baseUrl, this.headers);

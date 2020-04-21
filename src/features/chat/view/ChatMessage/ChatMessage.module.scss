@@ -2,7 +2,7 @@
 @import '~shared/styles/variables';
 
 .Wrapper {
-  display: block;
+  display: flex;
   padding: rem(3);
   margin: rem(4);
   width: rem(300);

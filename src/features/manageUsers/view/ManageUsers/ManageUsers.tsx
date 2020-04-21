@@ -3,7 +3,7 @@ import { Table, Button, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import { useMountedState } from 'react-use';
 
-import { useApi } from 'utils/hooks/useApi';
+import { useApi } from 'shared/hooks/useApi';
 import { User } from 'shared/types/models';
 import { routes } from 'modules/routes';
 

@@ -4,7 +4,7 @@ import { Form, FormRenderProps } from 'react-final-form';
 import { Typography, Button } from 'antd';
 
 import { TextInputField } from 'shared/view/fields';
-import { useApi } from 'utils/hooks/useApi';
+import { useApi } from 'shared/hooks/useApi';
 import { AuthContext } from 'services/auth';
 import { MessageResponse } from 'services/api/types/models/message';
 import { Message } from 'shared/types/models';
@@ -37,14 +37,11 @@ export const Chat = () => {
   };
 
   useEffect(() => {
-    api.socket.init();
     const observable = api.socket.onMessage();
     observable.subscribe((m: MessageResponse) => {
-      setMessages(state => [...state, m]);
+      setMessages(state => [m, ...state]);
     });
-
-    return () => api.socket.disconnect();
-  });
+  }, [api.socket]);
 
   const renderForm = ({ handleSubmit }: FormRenderProps<ChatForm>) => (
     <form onSubmit={handleSubmit} autoComplete="off">
@@ -54,29 +51,34 @@ export const Chat = () => {
           [styles.SlideDown]: !isRollUp,
         })}
       >
-        {messages.map((x, i) => (
-          <ChatMessage key={i}>
-            {x}
-          </ChatMessage>
-        ))}
-      </div>
-      {auth?.user && (
-        <div
-          className={cn(styles.InputWrapper, {
-            [styles.SlideUp]: isRollUp,
-            [styles.SlideDown]: !isRollUp,
-          })}
-        >
-          <TextInputField
-            name="message"
-            placeholder="Enter your message"
-          />
-          <Button type="primary" htmlType="submit" loading={isLoading}>
-            Send
-          </Button>
+        {auth?.user && (
+          <div
+            className={cn(styles.InputWrapper, {
+              [styles.SlideUp]: isRollUp,
+              [styles.SlideDown]: !isRollUp,
+            })}
+          >
+            <TextInputField
+              name="message"
+              placeholder="Enter your message"
+            />
+            <Button type="primary" htmlType="submit" loading={isLoading} className={styles.SendButton}>
+              Send
+            </Button>
+          </div>
+        )}
+        {error && <Text type="danger">{error}</Text>}
+        <div className={styles.Messages}>
+          {messages.map((x, i) => (
+            <ChatMessage
+              key={`${x.sender.email}_${i}`}
+              className={cn({ [styles.OwnMessage]: x.sender.email === auth?.user?.email })}
+            >
+              {x.content}
+            </ChatMessage>
+          ))}
         </div>
-      )}
-      {error && <Text type="danger">{error}</Text>}
+      </div>
     </form>
   );
 

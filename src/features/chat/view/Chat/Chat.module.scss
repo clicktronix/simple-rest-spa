@@ -15,8 +15,7 @@
 }
 
 .Content {
-  padding: rem(3);
-  margin-bottom: rem(35);
+  margin-bottom: rem(5);
   height: rem(500);
   overflow: auto;
   display: flex;
@@ -24,11 +23,21 @@
   border: 1px solid $white-grey;
 }
 
-.InputWrapper {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+.Messages {
   display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: rem(5);
+}
+
+.InputWrapper {
+  width: 97%;
+  display: flex;
+  align-self: center;
+  margin-bottom: rem(5);
+}
+
+.SendButton {
+  margin-left: rem(5);
 }
 
 .SlideUp {
@@ -37,4 +46,8 @@
 
 .SlideDown {
   display: flex;
+}
+
+.OwnMessage {
+  align-self: flex-end;
 }

@@ -1,9 +1,15 @@
 import React from 'react';
+import cn from 'classnames';
 
 import styles from './ChatMessage.module.scss';
 
-export const ChatMessage: React.FC = ({ children }) => (
-  <div className={styles.Wrapper}>
+type ChatMessageProps = {
+  children: React.ReactNode;
+  className: string;
+};
+
+export const ChatMessage = ({ children, className }: ChatMessageProps) => (
+  <div className={cn(styles.Wrapper, className)}>
     {children}
   </div>
 );
