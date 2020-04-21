@@ -10,6 +10,7 @@ import { MessageResponse } from 'services/api/types/models/message';
 import { Message } from 'shared/types/models';
 
 import styles from './Chat.module.scss';
+import arrow from './img/arrow.png';
 import { ChatMessage } from '../ChatMessage/ChatMessage';
 
 type ChatForm = {
@@ -52,12 +53,7 @@ export const Chat = () => {
         })}
       >
         {auth?.user && (
-          <div
-            className={cn(styles.InputWrapper, {
-              [styles.SlideUp]: isRollUp,
-              [styles.SlideDown]: !isRollUp,
-            })}
-          >
+          <div className={cn(styles.InputWrapper)}>
             <TextInputField
               name="message"
               placeholder="Enter your message"
@@ -85,7 +81,7 @@ export const Chat = () => {
   return (
     <div className={styles.Window}>
       <div className={styles.Header} onClick={onHeaderClick}>
-        Chat
+        <img src={arrow} className={cn(styles.Arrow, { [styles.RotatedArrow]: isRollUp })} alt="arrow" />
       </div>
       <Form<ChatForm>
         onSubmit={handleFormSubmit}

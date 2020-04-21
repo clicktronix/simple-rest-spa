@@ -9,7 +9,7 @@ type ChatMessageProps = {
 };
 
 export const ChatMessage = ({ children, className }: ChatMessageProps) => (
-  <div className={cn(styles.Wrapper, className)}>
+  <div className={cn(className, styles.Wrapper)}>
     {children}
   </div>
 );
