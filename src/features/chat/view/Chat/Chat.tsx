@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
 import { Form, FormRenderProps } from 'react-final-form';
-import { Typography, Button } from 'antd';
+import { Button } from 'antd';
 
 import { TextInputField } from 'shared/view/fields';
 import { useApi } from 'shared/hooks/useApi';
@@ -15,16 +15,17 @@ import { ChatMessage } from '../ChatMessage/ChatMessage';
 
 type ChatForm = {
   message: string;
+  isOpen?: boolean;
 };
 
-const { Text } = Typography;
+type ChatProps = {
+  isHidden?: boolean;
+};
 
-export const Chat = () => {
+export const Chat = ({ isHidden }: ChatProps) => {
   const api = useApi();
   const auth = useContext(AuthContext);
-  const [isRollUp, setIsRollUp] = useState(false);
-  const [isLoading] = useState(false);
-  const [error] = useState('');
+  const [isRollUp, setIsRollUp] = useState(isHidden || false);
   const [messages, setMessages] = useState<Message[]>([]);
 
   const handleFormSubmit = (values: ChatForm) => {
@@ -67,14 +68,12 @@ export const Chat = () => {
               <Button
                 type="primary"
                 htmlType="submit"
-                loading={isLoading}
                 className={styles.SendButton}
               >
                 Send
               </Button>
             </div>
           )}
-          {error && <Text type="danger">{error}</Text>}
           <div className={styles.Messages}>
             {messages.map((x, i) => (
               <ChatMessage
