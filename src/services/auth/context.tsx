@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useAsync, useMountedState } from 'react-use';
 
-import { useToken } from 'utils/hooks/useToken';
-import { useApi } from 'utils/hooks/useApi';
+import { useToken } from 'shared/hooks/useToken';
+import { useApi } from 'shared/hooks/useApi';
 import { User } from 'shared/types/models';
 
 import { Auth } from './types';

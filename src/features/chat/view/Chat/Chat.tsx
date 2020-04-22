@@ -1,83 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
 import { Form, FormRenderProps } from 'react-final-form';
-import { Form as AntForm, Typography, Button } from 'antd';
+import { Button } from 'antd';
 
 import { TextInputField } from 'shared/view/fields';
+import { useApi } from 'shared/hooks/useApi';
+import { AuthContext } from 'services/auth';
+import { MessageResponse } from 'services/api/types/models/message';
+import { Message } from 'shared/types/models';
 
 import styles from './Chat.module.scss';
+import arrow from './img/arrow.png';
 import { ChatMessage } from '../ChatMessage/ChatMessage';
 
 type ChatForm = {
   message: string;
+  isOpen?: boolean;
 };
 
-const { Text } = Typography;
+type ChatProps = {
+  isHidden?: boolean;
+};
 
-export const Chat = () => {
-  const [isRollUp, setIsRollUp] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+export const Chat = ({ isHidden }: ChatProps) => {
+  const api = useApi();
+  const auth = useContext(AuthContext);
+  const [isRollUp, setIsRollUp] = useState(isHidden || false);
+  const [messages, setMessages] = useState<Message[]>([]);
 
-  const handleFormSubmit = (values: ChatForm) => console.info(values);
+  const handleFormSubmit = (values: ChatForm) => {
+    auth?.user && api.socket.sendMessage({
+      content: values.message, sender: auth.user,
+    });
+  };
 
   const onHeaderClick = () => {
     setIsRollUp(state => !state);
   };
 
-  const renderForm = ({ handleSubmit }: FormRenderProps<ChatForm>) => (
-    <AntForm onFinish={handleSubmit}>
-      <div
-        className={cn(
-          styles.Content,
-          {
+  useEffect(() => {
+    const observable = api.socket.onMessage();
+    observable.subscribe((m: MessageResponse) => {
+      setMessages(state => [m, ...state]);
+    });
+  }, [api.socket]);
+
+  const renderForm = ({ form, handleSubmit }: FormRenderProps<ChatForm>) => {
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      handleSubmit(event);
+      form.reset();
+    };
+
+    return (
+      <form onSubmit={onSubmit} autoComplete="off">
+        <div
+          className={cn(styles.Content, {
             [styles.SlideUp]: isRollUp,
             [styles.SlideDown]: !isRollUp,
-          },
-        )}
-      >
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-        <ChatMessage>Content</ChatMessage>
-      </div>
-      <div
-        className={cn(
-          styles.InputWrapper,
-          {
-            [styles.SlideUp]: isRollUp,
-            [styles.SlideDown]: !isRollUp,
-          },
-        )}
-      >
-        <TextInputField
-          name="message"
-          placeholder="Enter your message"
-        />
-        <Button type="primary" htmlType="submit" loading={isLoading}>
-          Send
-        </Button>
-      </div>
-      {error && <Text type="danger">{error}</Text>}
-    </AntForm>
-  );
+          })}
+        >
+          {auth?.user && (
+            <div className={cn(styles.InputWrapper)}>
+              <TextInputField
+                name="message"
+                placeholder="Enter your message"
+              />
+              <Button
+                type="primary"
+                htmlType="submit"
+                className={styles.SendButton}
+              >
+                Send
+              </Button>
+            </div>
+          )}
+          <div className={styles.Messages}>
+            {messages.map((x, i) => (
+              <ChatMessage
+                key={`${x.sender.email}_${i}`}
+                message={x}
+              />
+            ))}
+          </div>
+        </div>
+      </form>
+    );
+  };
 
   return (
     <div className={styles.Window}>
       <div className={styles.Header} onClick={onHeaderClick}>
-        Chat
+        <img src={arrow} className={cn(styles.Arrow, { [styles.RotatedArrow]: isRollUp })} alt="arrow" />
       </div>
       <Form<ChatForm>
         onSubmit={handleFormSubmit}

@@ -9,32 +9,73 @@
 }
 
 .Header {
-  padding: rem(3);
   background-color: $white-grey;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
 }
 
 .Content {
-  padding: rem(3);
-  margin-bottom: rem(35);
-  height: rem(500);
+  margin-bottom: rem(5);
+  height: rem(400);
   overflow: auto;
   display: flex;
   flex-direction: column-reverse;
   border: 1px solid $white-grey;
 }
 
-.InputWrapper {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+.Messages {
   display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: rem(5);
+}
+
+.InputWrapper {
+  width: 97%;
+  display: flex;
+  align-self: center;
+  margin-bottom: rem(5);
+}
+
+.Arrow {
+  display: flex;
+  width: 10px;
+  transform: rotate(180deg);
+}
+
+.RotatedArrow {
+  transform: rotate(360deg);
+}
+
+.SendButton {
+  margin-left: rem(5);
 }
 
 .SlideUp {
-  display: none;
+  animation: closeChat 0.25s ease-out;
+  height: 0;
 }
 
 .SlideDown {
-  display: flex;
+  animation: openChat 0.25s ease-in;
+  height: rem(400);
+}
+
+@keyframes openChat {
+  0% {
+    height: 0px;
+  }
+  100% {
+    height: rem(400);
+  }
+}
+
+@keyframes closeChat {
+  0% {
+    height: rem(400);
+  }
+  100% {
+    height: 0px;
+  }
 }

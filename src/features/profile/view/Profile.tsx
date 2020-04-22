@@ -7,7 +7,7 @@ import { useMountedState } from 'react-use';
 import { AuthContext } from 'services/auth';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
-import { useApi } from 'utils/hooks/useApi';
+import { useApi } from 'shared/hooks/useApi';
 import { UpdateUser } from 'shared/types/models';
 
 import styles from './Profile.module.scss';

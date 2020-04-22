@@ -2,10 +2,26 @@
 @import '~shared/styles/variables';
 
 .Wrapper {
-  display: block;
-  padding: rem(3);
+  display: flex;
+  flex-direction: column;
+  padding: rem(3) rem(8);
   margin: rem(4);
   width: rem(300);
   border-radius: 5px;
+  background-color: $white-grey;
+}
+
+.OwnMessage {
+  align-self: flex-end;
+  align-items: flex-end;
   background-color: $white-blue;
+}
+
+.SenderName {
+  font-size: rem(10);
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }

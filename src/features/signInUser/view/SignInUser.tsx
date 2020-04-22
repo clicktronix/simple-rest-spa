@@ -7,7 +7,7 @@ import { useMountedState } from 'react-use';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { useApi } from 'utils/hooks/useApi';
+import { useApi } from 'shared/hooks/useApi';
 import { AuthContext } from 'services/auth';
 import { routes } from 'modules/routes';
 
