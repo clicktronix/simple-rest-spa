@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
 import { useMountedState } from 'react-use';
@@ -7,6 +7,7 @@ import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
 import { useApi } from 'shared/hooks/useApi';
+import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './SignUpUser.module.scss';
 
@@ -22,17 +23,17 @@ type SignUpForm = {
 export const SignUp = () => {
   const api = useApi();
   const isMounted = useMountedState();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useValidState(isMounted, false);
+  const [error, setError] = useValidState(isMounted, '');
 
   const signUp = async (values: SignUpForm) => {
     try {
       setIsLoading(true);
       await api.auth.signUp(values);
     } catch (e) {
-      isMounted && setError(e.message);
+      setError(e.message);
     } finally {
-      isMounted && setIsLoading(false);
+      setIsLoading(false);
     }
   };
 

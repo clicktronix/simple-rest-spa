@@ -39,6 +39,15 @@ class Auth extends BaseApi {
     });
     return Auth.handleResponse(response, (data: { token: TokenResponse }) => data.token);
   }
+
+  @autobind
+  public async logout() {
+    const response = await this.actions.get<{ success: boolean }>({
+      url: '/logout',
+      options: this.setHeaders(),
+    });
+    return Auth.handleResponse(response, (data: { success: boolean }) => data.success);
+  }
 }
 
 export { Auth };

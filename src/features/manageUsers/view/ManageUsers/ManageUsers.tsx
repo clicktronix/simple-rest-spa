@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Table, Button, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import { useMountedState } from 'react-use';
@@ -6,6 +6,7 @@ import { useMountedState } from 'react-use';
 import { useApi } from 'shared/hooks/useApi';
 import { User } from 'shared/types/models';
 import { routes } from 'modules/routes';
+import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './ManageUsers.module.scss';
 
@@ -15,35 +16,35 @@ export const ManageUsers = () => {
   const api = useApi();
   const history = useHistory();
   const isMounted = useMountedState();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useValidState(isMounted, false);
+  const [error, setError] = useValidState(isMounted, '');
+  const [users, setUsers] = useValidState<User[]>(isMounted, []);
 
   const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true);
       const data = await api.users.getUsers();
-      isMounted() && setUsers(data.map((x, i) => ({
+      setUsers(data.map((x, i) => ({
         ...x,
         key: i,
       })));
-      isMounted() && setError('');
+      setError('');
     } catch (e) {
-      isMounted() && setError(e.message);
+      setError(e.message);
     } finally {
-      isMounted() && setIsLoading(false);
+      setIsLoading(false);
     }
-  }, [api.users, isMounted]);
+  }, [api.users, setError, setIsLoading, setUsers]);
 
   const deleteUser = async (userId: string) => {
     try {
       setIsLoading(true);
       await api.users.deleteUser(userId);
-      isMounted() && setError('');
+      setError('');
     } catch (e) {
-      isMounted() && setError(e.message);
+      setError(e.message);
     } finally {
-      isMounted() && setIsLoading(false);
+      setIsLoading(false);
     }
   };
 

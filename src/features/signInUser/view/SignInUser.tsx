@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
 import { useHistory } from 'react-router';
@@ -10,6 +10,7 @@ import { composeValidators, makeRequired } from 'shared/validators';
 import { useApi } from 'shared/hooks/useApi';
 import { AuthContext } from 'services/auth';
 import { routes } from 'modules/routes';
+import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './SignInUser.module.scss';
 
@@ -25,19 +26,19 @@ export const SignIn = () => {
   const history = useHistory();
   const isMounted = useMountedState();
   const auth = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useValidState(isMounted, false);
+  const [error, setError] = useValidState(isMounted, '');
 
   const signIn = async (values: SignInForm) => {
     try {
       setIsLoading(true);
       const { data, tokens } = await api.auth.signIn(values);
       auth?.setAuth(data, tokens.accessToken, tokens.refreshToken);
-      isMounted && history.push(routes.mainRoutes.MAIN);
+      history.push(routes.mainRoutes.MAIN);
     } catch (e) {
-      isMounted && setError(e.message);
+      setError(e.message);
     } finally {
-      isMounted && setIsLoading(false);
+      setIsLoading(false);
     }
   };
 

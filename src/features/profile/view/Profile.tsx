@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
 import { useParams } from 'react-router';
@@ -9,6 +9,7 @@ import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { useApi } from 'shared/hooks/useApi';
 import { UpdateUser } from 'shared/types/models';
+import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './Profile.module.scss';
 
@@ -34,9 +35,9 @@ export const Profile = () => {
   const auth = useContext(AuthContext);
   const { userId } = useParams();
   const isMounted = useMountedState();
-  const [error, setError] = useState('');
-  const [user, setUser] = useState<UpdateUser>(initialUser);
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useValidState(isMounted, '');
+  const [user, setUser] = useValidState<UpdateUser>(isMounted, initialUser);
+  const [isLoading, setIsLoading] = useValidState(isMounted, false);
   const isOwnProfile = userId === auth?.user?.id;
 
   const fetchUserProfile = useCallback(async () => {
@@ -44,17 +45,17 @@ export const Profile = () => {
       try {
         setIsLoading(true);
         const usr = await api.users.getUser(userId);
-        isMounted() && setUser(state => ({
+        setUser(state => ({
           ...state, ...usr,
         }));
-        isMounted() && setError('');
+        setError('');
       } catch (e) {
-        isMounted() && setError(e.message);
+        setError(e.message);
       } finally {
-        isMounted() && setIsLoading(false);
+        setIsLoading(false);
       }
     }
-  }, [api.users, isMounted, userId]);
+  }, [api.users, setError, setIsLoading, setUser, userId]);
 
   const updateProfile = async (values: ProfileForm) => {
     try {
@@ -62,11 +63,11 @@ export const Profile = () => {
       userId && await api.users.updateUser(userId, {
         ...values, id: userId,
       });
-      isMounted() && setError('');
+      setError('');
     } catch (e) {
-      isMounted() && setError(e.message);
+      setError(e.message);
     } finally {
-      isMounted() && setIsLoading(false);
+      setIsLoading(false);
     }
   };
 

@@ -35,11 +35,22 @@ export const Header = () => {
         ))}
         {auth?.user
           ? (
-            <Menu.Item key={routes.profileRoutes.PROFILE} className={styles.Button}>
-              <Link to={`${routes.profileRoutes.PROFILE}/${auth.user.id}`}>
-                {auth.user.email}
-              </Link>
-            </Menu.Item>
+            <Menu.SubMenu
+              title={auth.user.email}
+              key={routes.profileRoutes.PROFILE}
+              className={styles.Button}
+            >
+              <Menu.Item>
+                <Link to={`${routes.profileRoutes.PROFILE}/${auth.user.id}`}>
+                  Profile
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={routes.authRoutes.LOGOUT}>
+                  Logout
+                </Link>
+              </Menu.Item>
+            </Menu.SubMenu>
           )
           : (
             <Menu.Item key={routes.authRoutes.SIGN_IN} className={styles.Button}>
