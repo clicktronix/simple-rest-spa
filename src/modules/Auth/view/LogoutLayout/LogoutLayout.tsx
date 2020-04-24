@@ -9,7 +9,7 @@ import { ApiContext } from 'services/api';
 import { routes } from 'modules/routes';
 
 import { Layout } from '../../../shared/Layout/Layout';
-import styles from './Logout.module.scss';
+import styles from './LogoutLayout.module.scss';
 
 export const Logout = () => {
   const api = useContext(ApiContext);
@@ -25,6 +25,7 @@ export const Logout = () => {
       await api?.auth.logout();
       history.push(routes.mainRoutes.MAIN);
       auth?.resetAuth();
+      setError('');
     } catch (e) {
       setError(e.message);
     } finally {

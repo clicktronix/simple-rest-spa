@@ -27,6 +27,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         setToken(tokens.accessToken, tokens.refreshToken);
         const u = await api.auth.signInByToken();
         setUser(u.data);
+        setError('');
       } catch (e) {
         setError(e.message);
       } finally {
@@ -53,6 +54,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
         const u = await api.auth.signInByToken();
         setUser(u.data);
         setToken(u.tokens.accessToken, u.tokens.refreshToken);
+        setError('');
       } catch (e) {
         setError(e.message);
       } finally {

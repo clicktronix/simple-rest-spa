@@ -25,12 +25,16 @@ export const SignUp = () => {
   const isMounted = useMountedState();
   const [isLoading, setIsLoading] = useValidState(isMounted, false);
   const [error, setError] = useValidState(isMounted, '');
+  const [success, setSuccess] = useValidState(isMounted, '');
 
   const signUp = async (values: SignUpForm) => {
     try {
       setIsLoading(true);
       await api.auth.signUp(values);
+      setSuccess('User successfully registered.');
+      setError('');
     } catch (e) {
+      setSuccess('');
       setError(e.message);
     } finally {
       setIsLoading(false);
@@ -86,6 +90,7 @@ export const SignUp = () => {
           </Button>
         </AntForm.Item>
         {error && <Text type="danger">{error}</Text>}
+        {success && <Text type="secondary">{success}</Text>}
       </AntForm>
     </div>
   );
