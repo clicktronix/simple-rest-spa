@@ -7,7 +7,7 @@ import * as routes from './routes';
 import { SignInLayout } from './view/SignInLayout/SignInLayout';
 import { SignUpLayout } from './view/SignUpLayout/SignUpLayout';
 import { UnauthorizedLayout } from './view/UnauthorizedLayout/UnauthorizedLayout';
-import { Logout } from './view/Logout/Logout';
+import { Logout } from './view/LogoutLayout/LogoutLayout';
 
 export class AuthModule extends Module {
   public static getRoutes() {
