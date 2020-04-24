@@ -35,6 +35,7 @@ export const SignIn = () => {
       const { data, tokens } = await api.auth.signIn(values);
       auth?.setAuth(data, tokens.accessToken, tokens.refreshToken);
       history.push(routes.mainRoutes.MAIN);
+      setError('');
     } catch (e) {
       setError(e.message);
     } finally {

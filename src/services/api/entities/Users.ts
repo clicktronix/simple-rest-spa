@@ -33,11 +33,10 @@ class Users extends BaseApi {
 
   @autobind
   public async deleteUser(userId: string) {
-    const response = await this.actions.del<UserResponse>({
+    await this.actions.del<UserResponse>({
       url: `/users/${userId}`,
       options: this.setHeaders(),
     });
-    return Users.handleResponse(response, convertServerUser);
   }
 }
 

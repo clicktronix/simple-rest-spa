@@ -25,6 +25,7 @@ export const Logout = () => {
       await api?.auth.logout();
       history.push(routes.mainRoutes.MAIN);
       auth?.resetAuth();
+      setError('');
     } catch (e) {
       setError(e.message);
     } finally {
