@@ -20,16 +20,18 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useValidState<User | null>(isMounted, null);
 
   const refreshTokenInterceptor = async () => {
-    try {
-      setIsLoading(true);
-      const tokens = await api.auth.updateTokens();
-      setToken(tokens.accessToken, tokens.refreshToken);
-      const u = await api.auth.signInByToken();
-      setUser(u.data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
+    if (getToken()) {
+      try {
+        setIsLoading(true);
+        const tokens = await api.auth.updateTokens();
+        setToken(tokens.accessToken, tokens.refreshToken);
+        const u = await api.auth.signInByToken();
+        setUser(u.data);
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
