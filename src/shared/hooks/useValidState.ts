@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
-export function useValidState<T>(isMounted: () => boolean, initial: T) {
+export function useValidState<T>(isMounted: () => boolean, initial: T): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [state, setState] = useState<T>(initial);
-  const checkedState = (args: T) => isMounted() && setState(args);
+  const checkedState: React.Dispatch<React.SetStateAction<T>> = useCallback((args: T) => {
+    if (isMounted()) {
+      setState(args);
+    }
+  }, [isMounted]);
 
   return [
     state,

@@ -2,12 +2,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Button } from 'antd';
+import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
 import { useApi } from 'shared/hooks/useApi';
 import { AuthContext } from 'services/auth';
 import { MessageResponse } from 'services/api/types/models/message';
 import { Message } from 'shared/types/models';
+import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './Chat.module.scss';
 import arrow from './img/arrow.png';
@@ -25,8 +27,9 @@ type ChatProps = {
 export const Chat = ({ isHidden }: ChatProps) => {
   const api = useApi();
   const auth = useContext(AuthContext);
+  const isMounted = useMountedState();
   const [isRollUp, setIsRollUp] = useState(isHidden || false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useValidState<Message[]>(isMounted, []);
 
   const handleFormSubmit = (values: ChatForm) => {
     auth?.user && api.socket.sendMessage({
@@ -43,7 +46,7 @@ export const Chat = ({ isHidden }: ChatProps) => {
     observable.subscribe((m: MessageResponse) => {
       setMessages(state => [m, ...state]);
     });
-  }, [api.socket]);
+  }, [api.socket, setMessages]);
 
   const renderForm = ({ form, handleSubmit }: FormRenderProps<ChatForm>) => {
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
