@@ -3,9 +3,9 @@ import React from 'react';
 import { Modal } from 'shared/view/components/Modal/Modal';
 
 type DeleteConfirmModalProps = {
+  isShowModal: boolean;
   onDelete: () => void;
   onCancel: () => void;
-  isShowModal: boolean;
 };
 
 export const DeleteConfirmModal = ({ onDelete, onCancel, isShowModal }: DeleteConfirmModalProps) => (

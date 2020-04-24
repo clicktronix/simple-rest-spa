@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
 import { Form, FormRenderProps } from 'react-final-form';
-import { Button } from 'antd';
 import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
@@ -9,6 +8,7 @@ import { useApi } from 'shared/hooks/useApi';
 import { AuthContext } from 'services/auth';
 import { MessageResponse } from 'services/api/types/models/message';
 import { Message } from 'shared/types/models';
+import { Button } from 'shared/view/components';
 import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './Chat.module.scss';
