@@ -1,47 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
-import { useHistory } from 'react-router';
-import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { useApi } from 'shared/hooks/useApi';
-import { AuthContext } from 'services/auth';
-import { routes } from 'modules/routes';
-import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './SignInUser.module.scss';
+import { useSignIn } from '../hooks/useSignIn';
+import { SignInForm } from '../types';
 
 const { Text } = Typography;
 
-type SignInForm = {
-  email: string;
-  password: string;
-};
-
 export const SignIn = () => {
-  const api = useApi();
-  const history = useHistory();
-  const isMounted = useMountedState();
-  const auth = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useValidState(isMounted, false);
-  const [error, setError] = useValidState(isMounted, '');
-
-  const signIn = async (values: SignInForm) => {
-    try {
-      setIsLoading(true);
-      const { data, tokens } = await api.auth.signIn(values);
-      auth?.setAuth(data, tokens.accessToken, tokens.refreshToken);
-      history.push(routes.mainRoutes.MAIN);
-      setError('');
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { signIn, error, isLoading } = useSignIn();
 
   const handleFormSubmit = (values: SignInForm) => signIn(values);
 

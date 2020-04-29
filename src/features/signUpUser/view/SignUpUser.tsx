@@ -1,45 +1,19 @@
 import React from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
-import { useMountedState } from 'react-use';
 
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 import { composeValidators, makeRequired } from 'shared/validators';
-import { useApi } from 'shared/hooks/useApi';
-import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './SignUpUser.module.scss';
+import { useSignUp } from '../hooks/useSignUp';
+import { SignUpForm } from '../types';
 
 const { Text } = Typography;
 
-type SignUpForm = {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-};
-
 export const SignUp = () => {
-  const api = useApi();
-  const isMounted = useMountedState();
-  const [isLoading, setIsLoading] = useValidState(isMounted, false);
-  const [error, setError] = useValidState(isMounted, '');
-  const [success, setSuccess] = useValidState(isMounted, '');
-
-  const signUp = async (values: SignUpForm) => {
-    try {
-      setIsLoading(true);
-      await api.auth.signUp(values);
-      setSuccess('User successfully registered.');
-      setError('');
-    } catch (e) {
-      setSuccess('');
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { signUp, isLoading, success, error } = useSignUp();
 
   const handleFormSubmit = (values: SignUpForm) => signUp(values);
 
