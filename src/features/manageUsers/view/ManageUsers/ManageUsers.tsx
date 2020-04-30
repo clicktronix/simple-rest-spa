@@ -1,14 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Table, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import { useMountedState } from 'react-use';
 
-import { useApi } from 'shared/hooks/useApi';
 import { User } from 'shared/types/models';
 import { routes } from 'modules/routes';
 import { useValidState } from 'shared/hooks/useValidState';
 import { Button } from 'shared/view/components';
 import { useFetchUsers } from 'features/manageUsers/hooks/useFetchUsers';
+import { useDeleteUser } from 'features/manageUsers/hooks/useDeleteUser';
 
 import styles from './ManageUsers.module.scss';
 import { DeleteConfirmModal } from '../DeleteConfirmModal/DeleteConfirmModal';
@@ -16,35 +16,21 @@ import { DeleteConfirmModal } from '../DeleteConfirmModal/DeleteConfirmModal';
 const { Text } = Typography;
 
 export const ManageUsers = () => {
-  const api = useApi();
   const history = useHistory();
   const isMounted = useMountedState();
-  const [isLoading, setIsLoading] = useValidState(isMounted, false);
-  const [error, setError] = useValidState(isMounted, '');
-  const { users } = useFetchUsers();
+  const { users, isLoading, fetchUsersError } = useFetchUsers();
+  const { deleteUser, isDeleting, deleteUserError } = useDeleteUser();
   const [isShowModal, setSetIsShowModal] = useValidState(isMounted, false);
   const [userToBeDeleted, setUserToBeDeleted] = useValidState(isMounted, '');
+  const error = fetchUsersError || deleteUserError;
 
-  const openModal = useCallback(() => {
+  const openModal = () => {
     setSetIsShowModal(true);
-  }, [setSetIsShowModal]);
+  };
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     setSetIsShowModal(false);
-  }, [setSetIsShowModal]);
-
-  const deleteUser = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      await api.users.deleteUser(userToBeDeleted);
-      closeModal();
-      setError('');
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [api.users, closeModal, setError, setIsLoading, userToBeDeleted]);
+  };
 
   const makeEditUserHandler = (userId: string) => () => {
     history.push(`${routes.profileRoutes.PROFILE}/${userId}`);
@@ -53,6 +39,11 @@ export const ManageUsers = () => {
   const makeDeleteUserHandler = (userId: string) => async () => {
     setUserToBeDeleted(userId);
     openModal();
+  };
+
+  const onDelete = () => {
+    deleteUser(userToBeDeleted);
+    closeModal();
   };
 
   const columns = [{
@@ -89,10 +80,10 @@ export const ManageUsers = () => {
 
   return (
     <div className={styles.UsersWrapper}>
-      <Table dataSource={users} columns={columns} loading={isLoading} bordered />
+      <Table dataSource={users} columns={columns} loading={isLoading || isDeleting} bordered />
       {error && <Text type="danger">{error}</Text>}
       <DeleteConfirmModal
-        onDelete={deleteUser}
+        onDelete={onDelete}
         onCancel={closeModal}
         isShowModal={isShowModal}
       />

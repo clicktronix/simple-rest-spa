@@ -8,7 +8,7 @@ import { User } from 'shared/types/models';
 export function useFetchUsers() {
   const api = useApi();
   const isMounted = useMountedState();
-  const [fetchUserError, setFetchUserError] = useValidState(isMounted, '');
+  const [fetchUsersError, setFetchUsersError] = useValidState(isMounted, '');
   const [users, setUsers] = useValidState<User[]>(isMounted, []);
   const [isLoading, setIsLoading] = useValidState(isMounted, false);
 
@@ -20,13 +20,13 @@ export function useFetchUsers() {
         ...x,
         key: i,
       })));
-      setFetchUserError('');
+      setFetchUsersError('');
     } catch (e) {
-      setFetchUserError(e.message);
+      setFetchUsersError(e.message);
     } finally {
       setIsLoading(false);
     }
-  }, [api.users, setFetchUserError, setIsLoading, setUsers]);
+  }, [api.users, setFetchUsersError, setIsLoading, setUsers]);
 
   useEffect(() => {
     fetchUsers();
@@ -35,7 +35,7 @@ export function useFetchUsers() {
   return {
     users,
     isLoading,
-    fetchUserError,
+    fetchUsersError,
     fetchUsers,
   };
 }
