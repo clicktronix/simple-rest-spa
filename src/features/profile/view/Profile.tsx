@@ -1,25 +1,16 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+import React, { useContext } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
 import { useParams } from 'react-router';
-import { useMountedState } from 'react-use';
 
 import { AuthContext } from 'services/auth';
 import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
-import { useApi } from 'shared/hooks/useApi';
-import { UpdateUser } from 'shared/types/models';
-import { useValidState } from 'shared/hooks/useValidState';
 
 import styles from './Profile.module.scss';
-
-type ProfileForm = {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-  newPassword: string;
-};
+import { useFetchUserProfile } from '../hooks/useFetchUserProfile';
+import { ProfileForm } from '../types';
+import { useUpdateProfile } from '../hooks/useUpdateProfile';
 
 const { Text } = Typography;
 
@@ -31,49 +22,12 @@ export const Profile = () => {
     password: '',
     newPassword: '',
   };
-  const api = useApi();
   const auth = useContext(AuthContext);
   const { userId } = useParams();
-  const isMounted = useMountedState();
-  const [error, setError] = useValidState(isMounted, '');
-  const [user, setUser] = useValidState<UpdateUser>(isMounted, initialUser);
-  const [isLoading, setIsLoading] = useValidState(isMounted, false);
+  const { user, fetchUserError, isLoading } = useFetchUserProfile(userId || '', initialUser);
+  const { updateProfile, updateError, isUpdating } = useUpdateProfile(userId || '');
   const isOwnProfile = userId === auth?.user?.id;
-
-  const fetchUserProfile = useCallback(async () => {
-    if (userId) {
-      try {
-        setIsLoading(true);
-        const usr = await api.users.getUser(userId);
-        setUser(state => ({
-          ...state, ...usr,
-        }));
-        setError('');
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  }, [api.users, setError, setIsLoading, setUser, userId]);
-
-  const updateProfile = async (values: ProfileForm) => {
-    try {
-      setIsLoading(true);
-      userId && await api.users.updateUser(userId, {
-        ...values, id: userId,
-      });
-      setError('');
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserProfile();
-  }, [fetchUserProfile]);
+  const error = fetchUserError || updateError;
 
   const handleFormSubmit = (values: ProfileForm) => updateProfile(values);
 
@@ -124,7 +78,7 @@ export const Profile = () => {
           </>
         )}
         <AntForm.Item>
-          <Button type="primary" htmlType="submit" loading={isLoading}>
+          <Button type="primary" htmlType="submit" loading={isLoading || isUpdating}>
             Save
           </Button>
         </AntForm.Item>

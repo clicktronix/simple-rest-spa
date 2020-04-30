@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Table, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import { useMountedState } from 'react-use';
@@ -8,6 +8,7 @@ import { User } from 'shared/types/models';
 import { routes } from 'modules/routes';
 import { useValidState } from 'shared/hooks/useValidState';
 import { Button } from 'shared/view/components';
+import { useFetchUsers } from 'features/manageUsers/hooks/useFetchUsers';
 
 import styles from './ManageUsers.module.scss';
 import { DeleteConfirmModal } from '../DeleteConfirmModal/DeleteConfirmModal';
@@ -20,7 +21,7 @@ export const ManageUsers = () => {
   const isMounted = useMountedState();
   const [isLoading, setIsLoading] = useValidState(isMounted, false);
   const [error, setError] = useValidState(isMounted, '');
-  const [users, setUsers] = useValidState<User[]>(isMounted, []);
+  const { users } = useFetchUsers();
   const [isShowModal, setSetIsShowModal] = useValidState(isMounted, false);
   const [userToBeDeleted, setUserToBeDeleted] = useValidState(isMounted, '');
 
@@ -32,27 +33,10 @@ export const ManageUsers = () => {
     setSetIsShowModal(false);
   }, [setSetIsShowModal]);
 
-  const fetchUsers = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const data = await api.users.getUsers();
-      setUsers(data.map((x, i) => ({
-        ...x,
-        key: i,
-      })));
-      setError('');
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [api.users, setError, setIsLoading, setUsers]);
-
   const deleteUser = useCallback(async () => {
     try {
       setIsLoading(true);
       await api.users.deleteUser(userToBeDeleted);
-      fetchUsers();
       closeModal();
       setError('');
     } catch (e) {
@@ -60,7 +44,7 @@ export const ManageUsers = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [api.users, closeModal, fetchUsers, setError, setIsLoading, userToBeDeleted]);
+  }, [api.users, closeModal, setError, setIsLoading, userToBeDeleted]);
 
   const makeEditUserHandler = (userId: string) => () => {
     history.push(`${routes.profileRoutes.PROFILE}/${userId}`);
@@ -102,10 +86,6 @@ export const ManageUsers = () => {
       </>
     ),
   }];
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
 
   return (
     <div className={styles.UsersWrapper}>
