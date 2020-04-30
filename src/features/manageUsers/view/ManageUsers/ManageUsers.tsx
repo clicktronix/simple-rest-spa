@@ -18,7 +18,7 @@ const { Text } = Typography;
 export const ManageUsers = () => {
   const history = useHistory();
   const isMounted = useMountedState();
-  const { users, isLoading, fetchUsersError } = useFetchUsers();
+  const { users, isLoading, fetchUsersError, fetchUsers } = useFetchUsers();
   const { deleteUser, isDeleting, deleteUserError } = useDeleteUser();
   const [isShowModal, setSetIsShowModal] = useValidState(isMounted, false);
   const [userToBeDeleted, setUserToBeDeleted] = useValidState(isMounted, '');
@@ -42,7 +42,7 @@ export const ManageUsers = () => {
   };
 
   const onDelete = () => {
-    deleteUser(userToBeDeleted);
+    deleteUser(userToBeDeleted).then(() => fetchUsers());
     closeModal();
   };
 
