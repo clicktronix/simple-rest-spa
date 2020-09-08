@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
-import { ClickParam } from 'antd/lib/menu';
+import { MenuInfo } from 'rc-menu/lib/interface';
 
 import { AuthContext } from 'services/auth';
 
@@ -17,15 +17,15 @@ const menuItems = [{
 export const Header = () => {
   const auth = useContext(AuthContext);
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState(location.pathname);
+  const [activeTab, setActiveTab] = useState<React.Key>(location.pathname);
 
-  const handleClick = (e: ClickParam) => {
+  const handleClick = (e: MenuInfo) => {
     setActiveTab(e.key);
   };
 
   return (
     <header>
-      <Menu onClick={handleClick} selectedKeys={[activeTab]} mode="horizontal">
+      <Menu onClick={handleClick} selectedKeys={[activeTab.toString()]} mode="horizontal">
         {menuItems.map(({ route, title }) => (
           <Menu.Item key={route}>
             <Link to={route} key={route}>
