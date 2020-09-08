@@ -32,8 +32,8 @@ export function useSignIn() {
   };
 
   return {
-    signIn,
     error,
     isLoading,
+    signIn,
   };
 }

@@ -23,8 +23,8 @@ export function useDeleteUser() {
   }, [api.users, setDeleteUserError, setIsDeleting]);
 
   return {
-    deleteUser,
     isDeleting,
     deleteUserError,
+    deleteUser,
   };
 }

@@ -5,7 +5,7 @@ import { useApi } from 'shared/hooks/useApi';
 import { useValidState } from 'shared/hooks/useValidState';
 import { UpdateUser } from 'shared/types/models';
 
-export function useFetchUserProfile(userId: string, initialUser: UpdateUser) {
+export function useFetchUserProfile(initialUser: UpdateUser, userId?: string) {
   const api = useApi();
   const isMounted = useMountedState();
   const [fetchUserError, setFetchUserError] = useValidState(isMounted, '');

@@ -26,8 +26,8 @@ export function useUpdateProfile(userId: string) {
   };
 
   return {
-    updateProfile,
     isUpdating,
     updateError,
+    updateProfile,
   };
 }

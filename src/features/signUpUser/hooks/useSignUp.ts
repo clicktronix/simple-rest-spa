@@ -27,9 +27,9 @@ export function useSignUp() {
   };
 
   return {
-    signUp,
     isLoading,
     success,
     error,
+    signUp,
   };
 }

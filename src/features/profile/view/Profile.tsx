@@ -11,22 +11,17 @@ import styles from './Profile.module.scss';
 import { useFetchUserProfile } from '../hooks/useFetchUserProfile';
 import { ProfileForm } from '../types';
 import { useUpdateProfile } from '../hooks/useUpdateProfile';
+import { initialUser } from '../constants';
 
 const { Text } = Typography;
 
 export const Profile = () => {
-  const initialUser = {
-    name: '',
-    surname: '',
-    email: '',
-    password: '',
-    newPassword: '',
-  };
   const auth = useContext(AuthContext);
-  const { userId } = useParams();
-  const { user, fetchUserError, isLoading } = useFetchUserProfile(userId || '', initialUser);
-  const { updateProfile, updateError, isUpdating } = useUpdateProfile(userId || '');
+  const { userId } = useParams<Record<string, string>>();
+  const { user, fetchUserError, isLoading } = useFetchUserProfile(initialUser, userId);
+  const { updateProfile, updateError, isUpdating } = useUpdateProfile(userId);
   const isOwnProfile = userId === auth?.user?.id;
+  const loading = isLoading || isUpdating;
   const error = fetchUserError || updateError;
 
   const handleFormSubmit = (values: ProfileForm) => updateProfile(values);
@@ -78,7 +73,7 @@ export const Profile = () => {
           </>
         )}
         <AntForm.Item>
-          <Button type="primary" htmlType="submit" loading={isLoading || isUpdating}>
+          <Button type="primary" htmlType="submit" loading={loading}>
             Save
           </Button>
         </AntForm.Item>

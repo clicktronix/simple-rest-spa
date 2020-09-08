@@ -22,6 +22,7 @@ export const ManageUsers = () => {
   const { deleteUser, isDeleting, deleteUserError } = useDeleteUser();
   const [isShowModal, setSetIsShowModal] = useValidState(isMounted, false);
   const [userToBeDeleted, setUserToBeDeleted] = useValidState(isMounted, '');
+  const loading = isLoading || isDeleting;
   const error = fetchUsersError || deleteUserError;
 
   const openModal = () => {
@@ -80,7 +81,7 @@ export const ManageUsers = () => {
 
   return (
     <div className={styles.UsersWrapper}>
-      <Table dataSource={users} columns={columns} loading={isLoading || isDeleting} bordered />
+      <Table dataSource={users} columns={columns} loading={loading} bordered />
       {error && <Text type="danger">{error}</Text>}
       <DeleteConfirmModal
         onDelete={onDelete}
