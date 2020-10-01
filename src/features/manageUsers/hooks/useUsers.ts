@@ -1,14 +1,14 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useMountedState } from 'react-use';
 
 import { useApi } from 'shared/hooks/useApi';
 import { useValidState } from 'shared/hooks/useValidState';
 import { User } from 'shared/types/models';
 
-export function useFetchUsers() {
+export function useUsers() {
   const api = useApi();
   const isMounted = useMountedState();
-  const [fetchUsersError, setFetchUsersError] = useValidState(isMounted, '');
+  const [error, setError] = useValidState(isMounted, '');
   const [users, setUsers] = useValidState<User[]>(isMounted, []);
   const [isLoading, setIsLoading] = useValidState(isMounted, false);
 
@@ -20,22 +20,31 @@ export function useFetchUsers() {
         ...x,
         key: i,
       })));
-      setFetchUsersError('');
+      setError('');
     } catch (e) {
-      setFetchUsersError(e.message);
+      setError(e.message);
     } finally {
       setIsLoading(false);
     }
-  }, [api.users, setFetchUsersError, setIsLoading, setUsers]);
+  }, [api.users, setError, setIsLoading, setUsers]);
 
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+  const deleteUser = useCallback(async (id: string) => {
+    try {
+      setIsLoading(true);
+      await api.users.deleteUser(id);
+      setError('');
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [api.users, setError, setIsLoading]);
 
   return {
     users,
     isLoading,
-    fetchUsersError,
+    error,
     fetchUsers,
+    deleteUser,
   };
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import { useMountedState } from 'react-use';
@@ -7,8 +7,7 @@ import { User } from 'shared/types/models';
 import { routes } from 'modules/routes';
 import { useValidState } from 'shared/hooks/useValidState';
 import { Button } from 'shared/view/components';
-import { useFetchUsers } from 'features/manageUsers/hooks/useFetchUsers';
-import { useDeleteUser } from 'features/manageUsers/hooks/useDeleteUser';
+import { useUsers } from 'features/manageUsers/hooks/useUsers';
 
 import styles from './ManageUsers.module.scss';
 import { DeleteConfirmModal } from '../DeleteConfirmModal/DeleteConfirmModal';
@@ -18,12 +17,13 @@ const { Text } = Typography;
 export const ManageUsers = () => {
   const history = useHistory();
   const isMounted = useMountedState();
-  const { users, isLoading, fetchUsersError, fetchUsers } = useFetchUsers();
-  const { deleteUser, isDeleting, deleteUserError } = useDeleteUser();
+  const { users, isLoading, error, fetchUsers, deleteUser } = useUsers();
   const [isShowModal, setSetIsShowModal] = useValidState(isMounted, false);
   const [userToBeDeleted, setUserToBeDeleted] = useValidState(isMounted, '');
-  const loading = isLoading || isDeleting;
-  const error = fetchUsersError || deleteUserError;
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const openModal = () => {
     setSetIsShowModal(true);
@@ -81,7 +81,7 @@ export const ManageUsers = () => {
 
   return (
     <div className={styles.UsersWrapper}>
-      <Table dataSource={users} columns={columns} loading={loading} bordered />
+      <Table dataSource={users} columns={columns} loading={isLoading} bordered />
       {error && <Text type="danger">{error}</Text>}
       <DeleteConfirmModal
         onDelete={onDelete}

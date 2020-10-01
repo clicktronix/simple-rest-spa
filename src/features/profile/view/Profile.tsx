@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Form, FormRenderProps } from 'react-final-form';
 import { Form as AntForm, Typography } from 'antd';
 import { useParams } from 'react-router';
@@ -8,9 +8,8 @@ import { TextInputField } from 'shared/view/fields';
 import { Button } from 'shared/view/components';
 
 import styles from './Profile.module.scss';
-import { useFetchUserProfile } from '../hooks/useFetchUserProfile';
+import { useProfile } from '../hooks/useProfile';
 import { ProfileForm } from '../types';
-import { useUpdateProfile } from '../hooks/useUpdateProfile';
 import { initialUser } from '../constants';
 
 const { Text } = Typography;
@@ -18,11 +17,12 @@ const { Text } = Typography;
 export const Profile = () => {
   const auth = useContext(AuthContext);
   const { userId } = useParams<Record<string, string>>();
-  const { user, fetchUserError, isLoading } = useFetchUserProfile(initialUser, userId);
-  const { updateProfile, updateError, isUpdating } = useUpdateProfile(userId);
+  const { user, error, isLoading, fetchUserProfile, updateProfile } = useProfile(initialUser, userId);
   const isOwnProfile = userId === auth?.user?.id;
-  const loading = isLoading || isUpdating;
-  const error = fetchUserError || updateError;
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   const handleFormSubmit = (values: ProfileForm) => updateProfile(values);
 
@@ -73,7 +73,7 @@ export const Profile = () => {
           </>
         )}
         <AntForm.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit" loading={isLoading}>
             Save
           </Button>
         </AntForm.Item>
